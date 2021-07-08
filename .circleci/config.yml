@@ -1,13 +1,54 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+
 version: 2.1
-# Use a package of configuration called an orb.
 orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
-# Orchestrate or schedule a set of jobs
+  # For slack alerts
+  slack: circleci/slack@4.1
+
+commands:
+  
+  destroy-environment:
+    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+    parameters:
+      workflow_id:
+        type: string
+    steps:
+      - run:
+          name: Destroy environments
+          no_output_timeout: 30m
+          when: on_fail
+          command: |
+            aws s3 rm s3://udapeople-frontend-${CIRCLE_WORKFLOW_ID} --recursive
+            aws s3 rb s3://udapeople-frontend-${CIRCLE_WORKFLOW_ID} --force
+            echo backend-${CIRCLE_WORKFLOW_ID}
+            aws cloudformation delete-stack --stack-name backend-${CIRCLE_WORKFLOW_ID}
+            echo frontend-${CIRCLE_WORKFLOW_ID}
+            aws cloudformation delete-stack --stack-name frontend-${CIRCLE_WORKFLOW_ID}
+            echo udapeople-frontend-${CIRCLE_WORKFLOW_ID}
+            #exit 1
+  
+  deploy_client:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+    run:
+      -name: creates infrastructure
+          command: |
+            aws cloudformation deploy --template-file .circleci/files/client.yml --tags project=udacity --stack-name client-${CIRCLE_WORKFLOW_ID} --parameter-overrides ID=client-${CIRCLE_WORKFLOW_ID} 
+
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
+  default:
     jobs:
-      - welcome/run
+#      - deploy_server 
+      - deploy_client
+#          requires: [deploy_server]
+#      - configure_client:
+#           requires: [deploy_client]
+#      - test_connectivity:
+#          requires: [deploy_client]
+#      - send_logs:
+#          requires: [test_connectivity]
+#      - send_alert:
+#          requires: [test_connectivity]
+
+
