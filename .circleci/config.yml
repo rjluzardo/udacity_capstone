@@ -32,9 +32,9 @@ commands:
     steps:
       - checkout
     run:
-      -name: creates infrastructure
-          command: |
-            aws cloudformation deploy --template-file .circleci/files/client.yml --tags project=udacity --stack-name client-${CIRCLE_WORKFLOW_ID} --parameter-overrides ID=client-${CIRCLE_WORKFLOW_ID} 
+      name: creates infrastructure
+      command: |
+        aws cloudformation deploy --template-file .circleci/files/client.yml --tags project=udacity --stack-name client-${CIRCLE_WORKFLOW_ID} --parameter-overrides ID=client-${CIRCLE_WORKFLOW_ID} 
 
 workflows:
   default:
@@ -48,7 +48,7 @@ workflows:
 #          requires: [deploy_client]
 #      - send_logs:
 #          requires: [test_connectivity]
-#      - send_alert:
+#      - send_slack_alert:
 #          requires: [test_connectivity]
 
 
