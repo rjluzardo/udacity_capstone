@@ -34,7 +34,7 @@ jobs:
       - run:
           name: creates infrastructure
           command: |
-            aws cloudformation deploy --template-file .circleci/files/backend.yml --tags project=udacity --stack-name client-${CIRCLE_WORKFLOW_ID} --parameter-overrides ID=client-${CIRCLE_WORKFLOW_ID} 
+            aws cloudformation deploy --template-file .circleci/files/client.yml --tags project=udacity --stack-name client-${CIRCLE_WORKFLOW_ID} --parameter-overrides ID=client-${CIRCLE_WORKFLOW_ID} 
 
 workflows:
   default:
