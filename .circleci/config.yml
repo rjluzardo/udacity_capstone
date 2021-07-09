@@ -26,21 +26,20 @@ commands:
             echo udapeople-frontend-${CIRCLE_WORKFLOW_ID}
             #exit 1
 jobs: 
-  deploy_client:
+  deploy-client:
     docker:
       - image: amazon/aws-cli
     steps:
       - checkout
-    run:
-      name: creates infrastructure
-      command: |
-        aws cloudformation deploy --template-file .circleci/files/client.yml --tags project=udacity --stack-name client-${CIRCLE_WORKFLOW_ID} --parameter-overrides ID=client-${CIRCLE_WORKFLOW_ID} 
+      - run:
+          name: creates infrastructure
+          command: |
+            aws cloudformation deploy --template-file .circleci/files/client.yml --tags project=udacity --stack-name client-${CIRCLE_WORKFLOW_ID} --parameter-overrides ID=client-${CIRCLE_WORKFLOW_ID} 
 
 workflows:
   default:
     jobs:
-#      - deploy_server 
-      - deploy_client
+      - deploy-client
 #          requires: [deploy_server]
 #      - configure_client:
 #           requires: [deploy_client]
@@ -50,5 +49,6 @@ workflows:
 #          requires: [test_connectivity]
 #      - send_slack_alert:
 #          requires: [test_connectivity]
+#      - deploy_server
 
 
