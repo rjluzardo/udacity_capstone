@@ -17,13 +17,8 @@ commands:
           no_output_timeout: 30m
           when: on_fail
           command: |
-            aws s3 rm s3://udapeople-frontend-${CIRCLE_WORKFLOW_ID} --recursive
-            aws s3 rb s3://udapeople-frontend-${CIRCLE_WORKFLOW_ID} --force
-            echo backend-${CIRCLE_WORKFLOW_ID}
-            aws cloudformation delete-stack --stack-name backend-${CIRCLE_WORKFLOW_ID}
-            echo frontend-${CIRCLE_WORKFLOW_ID}
-            aws cloudformation delete-stack --stack-name frontend-${CIRCLE_WORKFLOW_ID}
-            echo udapeople-frontend-${CIRCLE_WORKFLOW_ID}
+            aws cloudformation delete-stack --stack-name capstone-${CIRCLE_WORKFLOW_ID}
+            echo capstone-${CIRCLE_WORKFLOW_ID}
             #exit 1
 jobs: 
   deploy-client:
@@ -35,14 +30,30 @@ jobs:
           name: creates infrastructure
           command: |
             aws cloudformation deploy --template-file .circleci/files/client.yml --tags project=udacity --stack-name capstone-${CIRCLE_WORKFLOW_ID} --parameter-overrides ID=client-${CIRCLE_WORKFLOW_ID} 
-
+  configure-client:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Add back-end ip to ansible inventory
+          command: |
+            rm .circleci/ansible/inventory.txt # clears the inventory file to have only the existing instances
+            echo "[web]" > .circleci/ansible/inventory.txt
+            aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --filters "Name=tag:project,Values=udacity" \
+              --output text >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
+            ls ~/
+          
 workflows:
   default:
     jobs:
       - deploy-client
 #          requires: [deploy_server]
-#      - configure_client:
-#           requires: [deploy_client]
+      - configure_client:
+           requires: [deploy_client]
 #      - test_connectivity:
 #          requires: [deploy_client]
 #      - send_logs:
