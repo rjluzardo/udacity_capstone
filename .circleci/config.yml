@@ -30,6 +30,9 @@ jobs:
           name: creates infrastructure
           command: |
             aws cloudformation deploy --template-file .circleci/files/client.yml --tags project=udacity --stack-name capstone-${CIRCLE_WORKFLOW_ID} --parameter-overrides ID=client-${CIRCLE_WORKFLOW_ID} 
+      - run: 
+          command: |  
+            yum -y install tar gzip
       - run:
           name: Add back-end ip to ansible inventory
           command: |
@@ -45,6 +48,9 @@ jobs:
           root: .circleci/ansible
           paths:
             - inventory.txt
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID}
+
   configure_client:
     docker:
       - image: python:3.7-alpine3.11
