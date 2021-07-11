@@ -17,5 +17,16 @@
       TYPEORM_MIGRATIONS: "{{ lookup('env','TYPEORM_MIGRATIONS') }}"
       TYPEORM_ENTITIES: "{{ lookup('env','TYPEORM_ENTITIES') }}"
       API_URL: "{{ lookup('env','API_URL') }}"
+  
+  pre_tasks:
+    - name: "wait 600 seconds for target connection to become reachable/usable."
+      wait_for_connection:
+        timeout: 120
+
+    - name: "install python for Ansible."
+      become: true
+      raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
+      changed_when: false
+      
   roles:
     - deploy-client
