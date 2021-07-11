@@ -17,3 +17,18 @@
     name: ["python3"]
     state: latest
     update_cache: yes
+
+- name: Creates directory
+  file:
+    path: ~/helloup
+    state: directory
+
+- name: "copy script"
+  template:
+    src: "files/capstone.py"
+    dest: "~/helloup/capstone.py"
+
+- name: run script
+  shell: |
+    python3 ~/helloup/capstone.py
+  
