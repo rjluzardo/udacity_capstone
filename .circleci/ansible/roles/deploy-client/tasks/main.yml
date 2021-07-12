@@ -28,10 +28,10 @@
     src: "files/capstone.py"
     dest: "~/helloup/capstone.py"
 
-- name: "copy logs"
-  template:
-    src: "files/log.txt"
-    dest: "~/helloup/log.txt"
+#- name: "copy logs"
+#  template:
+#    src: "files/log.txt"
+#    dest: "~/helloup/log.txt"
 
 - name: run curl
   shell: |
