@@ -7,13 +7,6 @@
 - name: "install dependencies."
   become: true
   apt:
-    name: ["nodejs", "npm"]
-    state: latest
-    update_cache: yes
-
-- name: "install dependencies."
-  become: true
-  apt:
     name: ["python3"]
     state: latest
     update_cache: yes
@@ -41,9 +34,12 @@
 #  shell: |
 #    python3 ~/helloup/capstone.py
 
+- name: "copy logs"
+  template:
+    src: "files/log.txt"
+    dest: "~/helloup/log.txt"
 
-
-#- name: check log
-#  shell: |
-#    tail ~/helloup/log.txt
+- name: check log
+  shell: |
+    tail ~/helloup/log.txt
   
