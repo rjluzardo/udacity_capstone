@@ -27,8 +27,8 @@
 #    dest: "~/helloup/log.txt"
 
 - name: run curl
-  shell: |
-    curl -I http://localhost >> ~/helloup/log.txt
+  shell: 'curl -I http://localhost >> ~/helloup/log.txt'
+  ignore_errors: true
 
 #- name: run script
 #  shell: |
