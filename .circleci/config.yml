@@ -34,7 +34,6 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
             curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             mv /tmp/eksctl /usr/local/bin
       - run:
@@ -46,8 +45,27 @@ jobs:
             --region us-west-2 \
             --nodegroup-name udacaps-k8-nodes \
             --node-type t2.micro \
-            --nodes 2
-    
+            --nodes 1
+      
+  deploy_k8_deployment:
+    docker:  
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout   
+      - run:
+          name: Install dependencies
+          command: curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
+
+      - run: 
+          name: check cluster status
+          command: | 
+            aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
+            kubectl get nodes
+
+      - run:
+          name: create deployment
+          command: kubectl apply -f .circleci/files/uda-capstone-dep.yml
+
   deploy_client:
     docker:
       - image: amazon/aws-cli
@@ -110,8 +128,8 @@ workflows:
   default:
     jobs:
       - deploy_k8_cluster
-#          cluster-name: k8-udacapstone
-#      - deploy_client:
+      - deploy_k8_deployment
+      - deploy_client
 #            requires: [deploy_k8_cluster]
 #      - configure_client:
 #           requires: [deploy_client, deploy_k8_cluster]
