@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   # For slack alerts
   slack: circleci/slack@4.1
+  aws-eks: circleci/aws-eks@0.2.3
 
 commands:
   
@@ -21,6 +22,22 @@ commands:
             echo capstone-${CIRCLE_WORKFLOW_ID}
             #exit 1
 jobs: 
+  deploy_server:
+    executor: aws-eks/python3
+    parameters:
+      cluster-name:
+        description: |
+          k8-udacapstone
+        type: string
+    steps:
+      - kubernetes/install
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: << parameters.cluster-name >>
+      - run:
+          command: |
+            kubectl get services
+          name: k8-udacapstone
+ 
   deploy_client:
     docker:
       - image: amazon/aws-cli
@@ -76,21 +93,22 @@ jobs:
           command: |
             cat .circleci/ansible/inventory.txt
             ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/deploy-client.yml
-#      - destroy-environment:
-#          workflow_id: ${CIRCLE_WORKFLOW_ID}
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID}
           
 workflows:
   default:
     jobs:
+      - deploy_server
       - deploy_client
       - configure_client:
-           requires: [deploy_client]
+           requires: [deploy_client, deploy_server]
 #      - test_connectivity:
 #          requires: [deploy_client]
 #      - send_logs:
 #          requires: [test_connectivity]
 #      - send_slack_alert:
 #          requires: [test_connectivity]
-#      - deploy_server
+#      
 
 
