@@ -56,6 +56,16 @@ jobs:
           name: Install dependencies
           command: |
             apt update && apt install build-essential checkinstall zlib1g-dev libtemplate-perl
+            wget -c https://www.openssl.org/source/openssl-1.0.2p.tar.gz
+            tar -xzvf openssl-1.0.2p.tar.gz
+            cd openssl-1.0.2p/
+            ./config
+            make
+            make test
+            make install
+            cd /usr/local/ssl/
+            ls -l
+            /usr/local/ssl/bin/openssl version
             curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
             openssl sha1 -sha256 kubectl
             chmod +x ./kubectl
@@ -137,7 +147,7 @@ workflows:
       - deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
       - deploy_client
-#         requires: [deploy_k8_cluster]
+#         requires: [deploy_k8_deployment]
 #      - configure_client:
 #           requires: [deploy_client, deploy_k8_cluster]
 #      - test_connectivity:
