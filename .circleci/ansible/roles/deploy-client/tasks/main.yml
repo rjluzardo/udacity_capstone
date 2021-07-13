@@ -36,8 +36,8 @@
 
 - name: "copy logs"
   fetch:
-    src: "~/helloup/log.txt"
-    dest: "/tmp/log.txt"
+    src: ~/helloup/log.txt
+    dest: /tmp/log.txt
     
 - name: check log
   shell:  tail ~/helloup/log.txt
