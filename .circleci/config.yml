@@ -76,8 +76,8 @@ jobs:
           command: |
             cat .circleci/ansible/inventory.txt
             ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/deploy-client.yml
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID}
+#      - destroy-environment:
+#          workflow_id: ${CIRCLE_WORKFLOW_ID}
           
 workflows:
   default:
