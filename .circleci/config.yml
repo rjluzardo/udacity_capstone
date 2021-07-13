@@ -67,8 +67,8 @@ jobs:
         default: 3
         type: integer
     steps:
-      - install-aws-iam-authenticator:
-          release-tag: << parameters.authenticator-release-tag >>
+#      - install-aws-iam-authenticator:
+#          release-tag: << parameters.authenticator-release-tag >>
       - create-cluster:
           aws-max-polling-wait-time: << parameters.aws-max-polling-wait-time >>
           aws-profile: << parameters.aws-profile >>
