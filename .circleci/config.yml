@@ -24,63 +24,21 @@ commands:
             #exit 1
 jobs: 
   deploy_k8_cluster:
-    executor: << parameters.executor >>
-    parameters:
-      authenticator-release-tag:
-        default: ''
-        type: string
-      aws-max-polling-wait-time:
-        default: 20m0s
-        description: |
-          Max wait time in any AWS polling operations
-        type: string
-      aws-profile:
-        default: ''
-        type: string
-      aws-region:
-        default: ''
-        type: string
-      cluster-name:
-        default: 'k8-udacapstone'
-        type: string
-      executor:
-        default: aws-eks/python3
-        type: executor
-      no-output-timeout:
-        default: 45m
-        type: string
-      show-eksctl-command:
-        default: false
-        type: boolean
-      ssh-access:
-        default: false
-        description: |
-          Control SSH access for nodes
-        type: boolean
-      ssh-public-key:
-        default: ''
-        type: string
-      tags:
-        default: ''
-        type: string
-      verbose:
-        default: 3
-        type: integer
+    docker:
+      - image: python:3.7-alpine3.11
     steps:
-#      - install-aws-iam-authenticator:
-#          release-tag: << parameters.authenticator-release-tag >>
-      - create-cluster:
-          aws-max-polling-wait-time: << parameters.aws-max-polling-wait-time >>
-          aws-profile: << parameters.aws-profile >>
-          aws-region: << parameters.aws-region >>
-          cluster-name: << parameters.cluster-name >>
-          no-output-timeout: << parameters.no-output-timeout >>
-          show-eksctl-command: << parameters.show-eksctl-command >>
-          skip-kubectl-install: false
-          ssh-access: << parameters.ssh-access >>
-          ssh-public-key: << parameters.ssh-public-key >>
-          tags: << parameters.tags >>
-          verbose: << parameters.verbose >>
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+                eksctl \
+                kubectl \
+            && pip3 install --upgrade pip \
+            && pip3 install \
+                awscli \
+            && rm -rf /var/cache/apk/* 
+    
   deploy_client:
     docker:
       - image: amazon/aws-cli
