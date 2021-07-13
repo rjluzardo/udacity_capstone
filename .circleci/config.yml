@@ -37,7 +37,16 @@ jobs:
             curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
             curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             /tmp/eksctl /usr/local/bin
-            eksctl version
+      - run:
+          name: create cluster
+          command: | 
+            eksctl create cluster \
+            --name k8-udacapstone \
+            --version 1.20 \
+            --region us-west-2 \
+            --nodegroup-name udacaps-k8-nodes \
+            --node-type t2.micro \
+            --nodes 2
     
   deploy_client:
     docker:
