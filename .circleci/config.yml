@@ -96,7 +96,7 @@ workflows:
     jobs:
       - deploy_k8_cluster
 #          cluster-name: k8-udacapstone
-      - deploy_client
+      - deploy_client:
             requires: [deploy_k8_cluster]
       - configure_client:
            requires: [deploy_client, deploy_k8_cluster]
