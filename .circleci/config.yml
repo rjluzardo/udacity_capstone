@@ -55,7 +55,9 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum group install 'Development Tools' && yum install perl-core libtemplate-perl zlib-devel wget
+            yum -y group install 'Development Tools'
+            yum -y install perl-core libtemplate-perl zlib-devel -y
+            yum -y install wget
             wget -c https://www.openssl.org/source/openssl-1.0.2p.tar.gz
             tar -xzvf openssl-1.0.2p.tar.gz
             cd openssl-1.0.2p/
