@@ -80,13 +80,18 @@ jobs:
       - run: 
           name: check cluster status
           command: | 
+            cd /usr/local/ssl
+            pwd
+            ls -la
             aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
-            kubectl cluster-info
-            kubectl get nodes -o wide 
+            /usr/local/ssl/kubectl cluster-info
+            /usr/local/ssl/kubectl get nodes -o wide 
 
       - run:
           name: create deployment
-          command: kubectl apply -f .circleci/files/uda-capstone-dep.yml
+          command: 
+            cd /usr/local/ssl
+            /usr/local/ssl/kubectl apply -f .circleci/files/uda-capstone-dep.yml
 
   deploy_client:
     docker:
