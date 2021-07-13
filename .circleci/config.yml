@@ -49,7 +49,7 @@ jobs:
       
   deploy_k8_deployment:
     docker:  
-      - image: python:3.7-alpine3.11
+      - image: amazon/aws-cli
     steps:
       - checkout   
       - run:
@@ -128,9 +128,10 @@ workflows:
   default:
     jobs:
       - deploy_k8_cluster
-      - deploy_k8_deployment
+      - deploy_k8_deployment:
+          requires: [deploy_k8_cluster]
       - deploy_client
-#            requires: [deploy_k8_cluster]
+#       
 #      - configure_client:
 #           requires: [deploy_client, deploy_k8_cluster]
 #      - test_connectivity:
