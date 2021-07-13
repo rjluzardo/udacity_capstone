@@ -7,7 +7,7 @@ date_time = today.strftime("%m/%d/%Y, %H:%M:%S")
 
 def is_hellow_up(date_time):
     try:
-        response = requests.get('http://localhost')
+        response = requests.get('a4938475e3c9a4f0fb580bf5a5cf8163-873477052.us-west-2.elb.amazonaws.com')
         #print('Server up', date_time)
         print('HTTP Code:',response.status_code)
         log = open\
