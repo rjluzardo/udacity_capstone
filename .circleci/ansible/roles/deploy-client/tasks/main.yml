@@ -35,7 +35,7 @@
 #    python3 ~/helloup/capstone.py
 
 - name: "copy logs"
-  ansible.builtin.fetch:
+  fetch:
     src: "~/helloup/log.txt"
     dest: "files/log.txt"
     
