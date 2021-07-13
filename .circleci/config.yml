@@ -44,7 +44,7 @@ jobs:
         default: 'k8-udacapstone'
         type: string
       executor:
-        default: python3
+        default: aws-eks/python3
         type: executor
       no-output-timeout:
         default: 45m
