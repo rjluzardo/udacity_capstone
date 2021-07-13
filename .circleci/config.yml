@@ -54,7 +54,12 @@ jobs:
       - checkout   
       - run:
           name: Install dependencies
-          command: curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
+          command: |
+            curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
+            openssl sha1 -sha256 kubectl
+            chmod +x ./kubectl
+            mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
+            kubectl version --short --client
 
       - run: 
           name: check cluster status
@@ -127,11 +132,11 @@ jobs:
 workflows:
   default:
     jobs:
-      - deploy_k8_cluster
-      - deploy_k8_deployment:
-          requires: [deploy_k8_cluster]
-      - deploy_client:
-         requires: [deploy_k8_cluster]
+      #- deploy_k8_cluster
+      - deploy_k8_deployment
+#          requires: [deploy_k8_cluster]
+      - deploy_client
+#         requires: [deploy_k8_cluster]
 #      - configure_client:
 #           requires: [deploy_client, deploy_k8_cluster]
 #      - test_connectivity:
