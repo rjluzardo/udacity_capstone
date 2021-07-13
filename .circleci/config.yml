@@ -24,21 +24,63 @@ commands:
             #exit 1
 jobs: 
   deploy_k8_cluster:
-    executor: aws-eks/python3
+    executor: << parameters.executor >>
     parameters:
-      cluster-name:
-        description: |
-          k8-udacapstone
+      authenticator-release-tag:
+        default: ''
         type: string
+      aws-max-polling-wait-time:
+        default: 20m0s
+        description: |
+          Max wait time in any AWS polling operations
+        type: string
+      aws-profile:
+        default: ''
+        type: string
+      aws-region:
+        default: ''
+        type: string
+      cluster-name:
+        default: 'k8-udacapstone'
+        type: string
+      executor:
+        default: python3
+        type: executor
+      no-output-timeout:
+        default: 45m
+        type: string
+      show-eksctl-command:
+        default: false
+        type: boolean
+      ssh-access:
+        default: false
+        description: |
+          Control SSH access for nodes
+        type: boolean
+      ssh-public-key:
+        default: ''
+        type: string
+      tags:
+        default: ''
+        type: string
+      verbose:
+        default: 3
+        type: integer
     steps:
-      - kubernetes/install
-      - aws-eks/update-kubeconfig-with-authenticator:
-          cluster-name: k8-udacapstone #<< parameters.cluster-name >>
-      - run:
-          command: |
-            kubectl get services
-          name: k8-udacapstone
- 
+      - install-aws-iam-authenticator:
+          release-tag: << parameters.authenticator-release-tag >>
+      - create-cluster:
+          aws-max-polling-wait-time: << parameters.aws-max-polling-wait-time >>
+          aws-profile: << parameters.aws-profile >>
+          aws-region: << parameters.aws-region >>
+          cluster-name: << parameters.cluster-name >>
+          no-output-timeout: << parameters.no-output-timeout >>
+          show-eksctl-command: << parameters.show-eksctl-command >>
+          skip-kubectl-install: false
+          ssh-access: << parameters.ssh-access >>
+          ssh-public-key: << parameters.ssh-public-key >>
+          tags: << parameters.tags >>
+          verbose: << parameters.verbose >>
   deploy_client:
     docker:
       - image: amazon/aws-cli
@@ -100,8 +142,8 @@ jobs:
 workflows:
   default:
     jobs:
-      - deploy_k8_cluster:
-          cluster-name: k8-udacapstone
+      - deploy_k8_cluster
+#          cluster-name: k8-udacapstone
       - deploy_client
       - configure_client:
            requires: [deploy_client, deploy_k8_cluster]
