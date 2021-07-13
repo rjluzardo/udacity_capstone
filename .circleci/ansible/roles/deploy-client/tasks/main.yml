@@ -34,12 +34,12 @@
 #  shell: |
 #    python3 ~/helloup/capstone.py
 
-#- name: "copy logs"
-#  template:
-#    src: "files/log.txt"
-#    dest: "~/helloup/log.txt"
+- name: "copy logs"
+  template:
+    src: "files/log.txt"
+    dest: "~/helloup/log.txt"
 
-#- name: check log
-#  shell: |
-#    tail ~/helloup/log.txt
+- name: check log
+  shell: |
+    tail ~/helloup/log.txt
   
