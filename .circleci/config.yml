@@ -59,9 +59,9 @@ jobs:
             name: deployment 
             command: | 
               cd .circleci/files
-              chmod 777 run_kubernetes.sh
+              chmod 777 /tmp/run_kubernetes.sh
               ls -la
-              bash .circleci/files/run_kubernetes.sh
+              /tmp/run_kubernetes.sh
   
   create-deploy:
     docker:
