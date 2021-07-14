@@ -64,7 +64,6 @@ jobs:
           resource-file-path: .circleci/files/uda-capstone-dep.yml
           resource-name: deployment/nginx-deployment
 
-      
   deploy_k8_deployment:
     docker:  
       - image: amazon/aws-cli
