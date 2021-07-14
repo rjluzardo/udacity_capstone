@@ -56,9 +56,6 @@ jobs:
       - run: 
           name: check cluster status
           command: | 
-            cd /usr/local/ssl
-            pwd
-            ls -la
             aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
