@@ -49,7 +49,7 @@ jobs:
   
   create-update:
     docker:
-      - image: 'cimg/base:stable'
+      - image: amazon/aws-cli #'cimg/base:stable'
     steps:
       - checkout
       - kubernetes/install-kubectl
