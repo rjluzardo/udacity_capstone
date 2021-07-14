@@ -61,7 +61,7 @@ jobs:
               cd .circleci/files
               chmod +x run_kubernetes.sh
               ls -la
-              ./run_kubernetes.sh
+              ~/run_kubernetes.sh
   
   create-deploy:
     docker:
