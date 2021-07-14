@@ -47,44 +47,6 @@ jobs:
             --node-type t2.micro \
             --nodes 1
   
-  easy-deploy:
-      docker:
-      - image: amazon/aws-cli
-      steps:
-        - checkout
-        - run: 
-            name: authenticate
-            command: aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
-        - run: 
-            name: deployment 
-            command: | 
-            
-  
-  create-deploy:
-    docker:
-      - image: amazon/aws-cli
-    executor: aws-eks/python3
-    parameters:
-      cluster-name:
-        description: |
-          Name of the EKS cluster
-        type: string
-    steps:
-      - checkout
-      - run: 
-          name: authenticate
-          command: aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
-      - aws-eks/update-kubeconfig-with-authenticator:
-          cluster-name: k8-udacapstone
-          aws_region: us-west-2
-          namespace: capstone
-
-          install-kubectl: true
-      - kubernetes/create-or-update-resource:
-          get-rollout-status: true
-          resource-file-path: .circleci/files/uda-capstone-dep.yml
-          resource-name: deployment/myapp
-
   deploy_k8_deployment:
     docker:  
       - image: amazon/aws-cli
@@ -108,12 +70,9 @@ jobs:
             ./kubectl cluster-info
             ./kubectl get nodes -o wide 
             ./kubectl get pods
-#            ./kubectl run kubernetes-udacapstone2 --image=rluzardo/app --port=80
+            ./kubectl delete deploy kubernetes-udacapstone
+            ./kubectl run kubernetes-udacapstone --image=rluzardo/app --port=80
 
-      - run:
-          name: create deployment
-          command: 
-           ./kubectl run kubernetes-udacapstone --image=rluzardo/app --port=80
 
   deploy_client:
     docker:
