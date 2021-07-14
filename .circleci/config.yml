@@ -118,15 +118,14 @@ jobs:
             pwd
             ls -la
             aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
-            kubectl cluster-info
-            kubectl get nodes -o wide 
+            ./kubectl cluster-info
+            ./kubectl get nodes -o wide 
 
       - run:
           name: create deployment
           command: 
             dockerpath=rluzardo/app
-            cd /usr/local/ssl
-            /usr/local/ssl/kubectl run kubernetes-udacity --image=$dockerpath --port=80
+           ./kubectl run kubernetes-udacity --image=$dockerpath --port=80
 
   deploy_client:
     docker:
