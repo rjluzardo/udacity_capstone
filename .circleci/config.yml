@@ -3,7 +3,7 @@ version: 2.1
 orbs:
   # For slack alerts
   slack: circleci/slack@4.1
-  aws-eks: circleci/aws-eks@0.2.3
+  aws-eks: circleci/aws-eks@1.1.0
   kubernetes: circleci/kubernetes@0.12.0
 
 commands:
@@ -47,7 +47,22 @@ jobs:
             --node-type t2.micro \
             --nodes 1
   
-  create-update:
+  - aws-eks/create-deploy
+    executor: aws-eks/python3
+    parameters:
+      cluster-name: k8-udacapstone
+        type: string
+    steps:
+      - checkout
+      - aws-eks/update-kubeconfig-with-authenticator:
+          cluster-name: k8-udacapstone
+          install-kubectl: true
+      - kubernetes/create-or-update-resource:
+          get-rollout-status: true
+          resource-file-path: tests/nginx-deployment/deployment.yaml
+          resource-name: deployment/nginx-deployment
+
+  #create-update:
     docker:
       - image: amazon/aws-cli #'cimg/base:stable'
     steps:
@@ -171,7 +186,7 @@ workflows:
   default:
     jobs:
       #- deploy_k8_cluster
-      - create-update
+      - aws-eks/create-deploy
       #- deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
       #- deploy_client
