@@ -47,6 +47,18 @@ jobs:
             --node-type t2.micro \
             --nodes 1
   
+  easy-deploy:
+      docker:
+      - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run: 
+            name: authenticate
+            command: aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
+        - run: 
+            name: deployment 
+            command: sh .circleci/files/run_kubernetes.sh
+  
   create-deploy:
     docker:
       - image: amazon/aws-cli
@@ -180,9 +192,9 @@ workflows:
   default:
     jobs:
       #- deploy_k8_cluster
-      - create-deploy:
-          cluster-name: k8-udacapstone
-
+      #- create-deploy:
+      #    cluster-name: k8-udacapstone
+       - easy-deploy 
       #- deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
       #- deploy_client
