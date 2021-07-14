@@ -57,7 +57,7 @@ jobs:
             command: aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
         - run: 
             name: deployment 
-            command: sh .circleci/files/run_kubernetes.sh
+            command: .circleci/files/run_kubernetes.sh
   
   create-deploy:
     docker:
