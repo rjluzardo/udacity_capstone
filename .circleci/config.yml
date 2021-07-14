@@ -97,19 +97,6 @@ jobs:
              chmod +x ./kubectl
              mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
              echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
-#            yum -y group install 'Development Tools'
-#            yum -y install perl-core libtemplate-perl zlib-devel -y
-#            yum -y install wget
-#            wget -c https://www.openssl.org/source/openssl-1.0.2p.tar.gz
-#            tar -xzvf openssl-1.0.2p.tar.gz
-#            cd openssl-1.0.2p/
-#            ./config
-#            make
-#            make test
-#            make install
-#            cd /usr/local/ssl/
-#            ls -l
-#            /usr/local/ssl/bin/openssl version
 
 
       - run: 
@@ -120,6 +107,8 @@ jobs:
             aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
             ./kubectl cluster-info
             ./kubectl get nodes -o wide 
+            ./kubectl get pods
+#            ./kubectl run kubernetes-udacapstone2 --image=rluzardo/app --port=80
 
       - run:
           name: create deployment
