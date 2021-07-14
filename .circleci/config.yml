@@ -125,7 +125,7 @@ jobs:
           name: create deployment
           command: 
             dockerpath=rluzardo/app
-           ./kubectl run kubernetes-udacity --image=$dockerpath --port=80
+           ./kubectl run kubernetes-udacity --image=rluzardo/app --port=80
 
   deploy_client:
     docker:
