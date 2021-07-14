@@ -193,10 +193,10 @@ jobs:
 workflows:
   default:
     jobs:
-      - deploy_k8_cluster
+      #- deploy_k8_cluster
       #- create-deploy:
       #    cluster-name: k8-udacapstone
-      #- deploy_k8_deployment
+      - deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
       #- deploy_client
 #         requires: [deploy_k8_deployment]
