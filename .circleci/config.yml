@@ -58,10 +58,7 @@ jobs:
         - run: 
             name: deployment 
             command: | 
-              cd .circleci/files
-              chmod 777 /tmp/run_kubernetes.sh
-              ls -la
-              /tmp/run_kubernetes.sh
+            
   
   create-deploy:
     docker:
@@ -131,8 +128,9 @@ jobs:
       - run:
           name: create deployment
           command: 
+            dockerpath=rluzardo/app
             cd /usr/local/ssl
-            /usr/local/ssl/kubectl apply -f .circleci/files/uda-capstone-dep.yml
+            /usr/local/ssl/kubectl run kubernetes-udacity --image=$dockerpath --port=80
 
   deploy_client:
     docker:
@@ -195,10 +193,9 @@ jobs:
 workflows:
   default:
     jobs:
-      #- deploy_k8_cluster
+      - deploy_k8_cluster
       #- create-deploy:
       #    cluster-name: k8-udacapstone
-       - easy-deploy 
       #- deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
       #- deploy_client
