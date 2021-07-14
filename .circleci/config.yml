@@ -58,8 +58,8 @@ jobs:
         - run: 
             name: deployment 
             command: |
-            chmod 744 .circleci/files/run_kubernetes.sh
-            .circleci/files/run_kubernetes.sh
+              chmod 744 .circleci/files/run_kubernetes.sh
+              .circleci/files/run_kubernetes.sh
   
   create-deploy:
     docker:
