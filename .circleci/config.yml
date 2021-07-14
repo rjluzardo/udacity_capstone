@@ -60,6 +60,7 @@ jobs:
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
           resource-file-path: .circleci/files/uda-capstone-dep.yml
+          resource-types: deployments
           #resource-name: deployment/uda-capstone-dep
           show-kubectl-command: true
       
