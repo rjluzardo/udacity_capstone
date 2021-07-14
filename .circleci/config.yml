@@ -48,6 +48,8 @@ jobs:
             --nodes 1
   
   create-deploy:
+    docker:
+      - image: amazon/aws-cli
     executor: aws-eks/python3
     parameters:
       cluster-name:
