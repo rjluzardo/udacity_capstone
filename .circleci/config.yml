@@ -4,7 +4,7 @@ orbs:
   # For slack alerts
   slack: circleci/slack@4.1
   aws-eks: circleci/aws-eks@1.1.0
-  kubernetes: circleci/kubernetes@0.12.0
+  kubernetes: circleci/kubernetes@0.13.0
 
 commands:
   
