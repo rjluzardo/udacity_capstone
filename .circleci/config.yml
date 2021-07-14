@@ -56,6 +56,9 @@ jobs:
         type: string
     steps:
       - checkout
+      - run: 
+          name: authenticate
+          command: aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: k8-udacapstone
           install-kubectl: true
