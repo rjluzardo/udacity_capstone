@@ -4,7 +4,7 @@ orbs:
   # For slack alerts
   slack: circleci/slack@4.1
   aws-eks: circleci/aws-eks@0.2.3
-  kubernetes: circleci/kubernetes@0.4.0
+  kubernetes: circleci/kubernetes@0.12.0
 
 commands:
   
@@ -46,6 +46,18 @@ jobs:
             --nodegroup-name udacaps-k8-nodes \
             --node-type t2.micro \
             --nodes 1
+  
+  create-update:
+    docker:
+      - image: 'cimg/base:stable'
+    steps:
+      - checkout
+      - kubernetes/install-kubectl
+      - kubernetes/create-or-update-resource:
+          get-rollout-status: true
+          resource-file-path: .circleci/files/uda-capstone-dep.yml
+          resource-name: deployment/uda-capstone-dep
+          show-kubectl-command: true
       
   deploy_k8_deployment:
     docker:  
@@ -155,9 +167,10 @@ workflows:
   default:
     jobs:
       #- deploy_k8_cluster
-      - deploy_k8_deployment
+      - create-update
+      #- deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
-      - deploy_client
+      #- deploy_client
 #         requires: [deploy_k8_deployment]
 #      - configure_client:
 #           requires: [deploy_client, deploy_k8_cluster]
