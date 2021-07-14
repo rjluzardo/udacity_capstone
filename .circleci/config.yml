@@ -63,6 +63,9 @@ jobs:
           command: aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: k8-udacapstone
+          aws_region: us-west-2
+          namespace: capstone
+
           install-kubectl: true
       - kubernetes/create-or-update-resource:
           get-rollout-status: true
