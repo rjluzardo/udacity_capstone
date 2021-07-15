@@ -70,8 +70,8 @@ jobs:
             ./kubectl cluster-info
             ./kubectl get nodes -o wide 
             ./kubectl get pods
-      #      ./kubectl delete deploy kubernetes-udacapstone
             ./kubectl run kubernetes-udacapstone --image=rluzardo/app --port=80
+                  #      ./kubectl delete deploy kubernetes-udacapstone
 
 
   deploy_client:
