@@ -21,9 +21,11 @@
     src: "files/capstone.py"
     dest: "~/helloup/capstone.py"
 
-#- name: run curl
-#  shell: 'curl -I http://curl -I a4938475e3c9a4f0fb580bf5a5cf8163-873477052.us-west-2.elb.amazonaws.com >> ~/helloup/log.txt'
-#  ignore_errors: true
+- name: run curl
+  shell: |
+  echo $$UDA_CAPSTONE_URL
+  curl -I $UDA_CAPSTONE_URL
+  ignore_errors: true
 
 - name: run script
   shell: |
