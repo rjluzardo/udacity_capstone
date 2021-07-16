@@ -72,6 +72,9 @@ jobs:
             ./kubectl apply -f .circleci/files/uda-capstone-dep.yml
             ./kubectl get pods
             ./kubectl get svc
+            export loadbalancer=$(kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')
+            echo $loadbalancer
+
 
   deploy_client:
     docker:
