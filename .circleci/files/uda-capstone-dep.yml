@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: uda_cap_hello
   labels:
-    app: nginx
+    app: uda_cap_hello
 spec:
   progressDeadlineSeconds: 900
   replicas: 1
@@ -25,7 +25,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: nginx 
+    app: uda_cap_hello 
   name: nginx-lb
 spec:
   ports:
@@ -33,6 +33,6 @@ spec:
     port: 80
     targetPort: 8080
   selector:
-    app: nginx
-    group: nginx
+    app: uda_cap_hello
+    group: uda_cap_hello
   type: LoadBalancer
