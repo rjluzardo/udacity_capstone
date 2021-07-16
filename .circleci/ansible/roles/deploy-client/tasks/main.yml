@@ -23,7 +23,7 @@
 
 - name: run curl
   shell: |
-  echo $$UDA_CAPSTONE_URL
+  echo $UDA_CAPSTONE_URL
   curl -I $UDA_CAPSTONE_URL
   ignore_errors: true
 
