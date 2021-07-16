@@ -76,7 +76,7 @@ jobs:
             echo $UDA_CAPSTONE_URL
       - run:
           name: check variable      
-          command: echo .circleci/files/.env
+          command: cat .circleci/files/.env
 
 
 
