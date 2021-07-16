@@ -72,8 +72,8 @@ jobs:
             ./kubectl apply -f .circleci/files/uda-capstone-dep.yml
             ./kubectl get pods
             ./kubectl get svc
-            export UDA_CAPSTONE_URL=$(./kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') >> ".circleci/files/.env"
-            echo $UDA_CAPSTONE_URL
+            export UDA_CAPSTONE_URL=$(./kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
+            echo $UDA_CAPSTONE_URL >> ".circleci/files/.env"
       - run:
           name: check variable      
           command: cat .circleci/files/.env
