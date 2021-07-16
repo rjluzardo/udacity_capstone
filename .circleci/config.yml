@@ -74,10 +74,11 @@ jobs:
             ./kubectl get svc
             export loadbalancer=$(./kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}')
             echo $loadbalancer
+            echo $UDA_CAPSTONE_URL
           environment:
             UDA-CAPSTONE-URL: $loadbalancer
       - run:
-          command: echo $UDA-CAPSTONE-URL
+          command: echo $UDA_CAPSTONE_URL
 
 
 
