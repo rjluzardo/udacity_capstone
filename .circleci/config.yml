@@ -69,10 +69,9 @@ jobs:
             aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
             ./kubectl cluster-info
             ./kubectl get nodes -o wide 
-            ./kubectl get pods
-            ./kubectl run kubernetes-udacapstone --image=rluzardo/app --port=80
-                  #      ./kubectl delete deploy kubernetes-udacapstone
             ./kubectl apply -f .circleci/files/uda-capstone-dep.yml
+            ./kubectl get pods
+            ./ kubectl get svc
 
   deploy_client:
     docker:
