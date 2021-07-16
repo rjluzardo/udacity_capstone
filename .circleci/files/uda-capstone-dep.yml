@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: udacaphello
+  name: udacaphello-deployment
   labels:
     app: udacaphello
 spec:
@@ -9,9 +9,9 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: udacaphello
   template:
-    metadata: udacaphello
+    metadata:
      labels:
         app: udacaphello
     spec:
