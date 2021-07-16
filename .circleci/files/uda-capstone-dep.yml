@@ -11,7 +11,7 @@ spec:
     matchLabels:
       app: nginx
   template:
-    metadata:
+    metadata: udacaphello
      labels:
         app: udacaphello
     spec:
