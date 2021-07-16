@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: uda_cap_hello
+  name: udacaphello
   labels:
-    app: uda_cap_hello
+    app: udacaphello
 spec:
   progressDeadlineSeconds: 900
   replicas: 1
@@ -13,10 +13,10 @@ spec:
   template:
     metadata:
      labels:
-        app: nginx
+        app: udacaphello
     spec:
       containers:
-      - name: uda_cap_hello
+      - name: udacaphello
         image: rluzardo/uda_cap_hello
         ports:
         - containerPort: 80
@@ -25,7 +25,7 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: uda_cap_hello 
+    app: udacaphello
   name: nginx-lb
 spec:
   ports:
@@ -33,6 +33,6 @@ spec:
     port: 80
     targetPort: 8080
   selector:
-    app: uda_cap_hello
-    group: uda_cap_hello
+    app: udacaphello
+    group: udacaphello
   type: LoadBalancer
