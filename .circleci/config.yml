@@ -76,7 +76,7 @@ jobs:
             echo $loadbalancer
           environment:
             UDA-CAPSTONE-URL: $loadbalancer
-
+      - run:
           command: echo $UDA-CAPSTONE-URL
 
 
