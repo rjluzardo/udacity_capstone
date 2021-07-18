@@ -33,7 +33,7 @@
      chmod +x ./kubectl
      mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$PATH:$HOME/bin
      echo 'export PATH=$PATH:$HOME/bin' >> ~/.bashrc
-     aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
+#     aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
  
 - name: export service name
   shell: |
