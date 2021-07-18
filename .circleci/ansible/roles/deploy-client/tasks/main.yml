@@ -36,8 +36,8 @@
 #     aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
  
 - name: export service name
-  vars:
-     UDA_CAPSTONE_URL:$(./kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
+  shell: |
+     UDA_CAPSTONE_URL=$(./kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
   #ignore_errors: true
 
 - name: test connectivity
