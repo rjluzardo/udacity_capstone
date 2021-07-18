@@ -22,10 +22,12 @@
     dest: "~/helloup/capstone.py"
 
 - name: run curl
+  environment:
+    UDA_CAPSTONE_URL: "{{ lookup('env','UDA_CAPSTONE_URL')}}"
   shell: |
-    echo $UDA_CAPSTONE_URL
+    echo "URL is:" $UDA_CAPSTONE_URL
     curl -I $UDA_CAPSTONE_URL
-  ignore_errors: true
+  #ignore_errors: true
 
 - name: run script
   shell: |
