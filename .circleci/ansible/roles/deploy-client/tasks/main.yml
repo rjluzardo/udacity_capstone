@@ -25,8 +25,8 @@
   environment:
     UDA_CAPSTONE_URL: "{{ lookup('env','UDA_CAPSTONE_URL')}}"
   shell: |
-    echo "URL is:" $UDA_CAPSTONE_URL
-    curl -I $UDA_CAPSTONE_URL
+    echo "URL is:" {{ lookup('env','UDA_CAPSTONE_URL')}}
+    curl -I {{ lookup('env','UDA_CAPSTONE_URL')}}
   #ignore_errors: true
 
 - name: run script
