@@ -145,7 +145,7 @@ workflows:
 #      - deploy_k8_cluster
       - deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
-      - deploy_client:
+      - deploy_client
 #         requires: [deploy_k8_deployment]
       - configure_client:
            requires: [deploy_client]
