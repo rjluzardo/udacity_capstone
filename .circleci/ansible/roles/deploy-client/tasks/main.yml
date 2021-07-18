@@ -21,6 +21,12 @@
     src: "files/capstone.py"
     dest: "~/helloup/capstone.py"
 
+- name: install aws cli
+  shell: |
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+    unzip awscliv2.zip
+    ./aws/install
+
 - name: run curl
   environment:
     UDA_CAPSTONE_URL: "{{ lookup('env','UDA_CAPSTONE_URL')}}"
