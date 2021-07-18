@@ -37,13 +37,13 @@
  
 - name: export service name
   shell: |
-     export UDA_CAPSTONE_URL=$(./kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
-     echo $UDA_CAPSTONE_URL
+     UDA_CAPSTONE_URL:$(./kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
+     echo {{ UDA_CAPSTONE_URL }}
   #ignore_errors: true
 
 - name: test connectivity
   shell: |
-    curl -I UDA_CAPSTONE_URL >> ~/helloup/log.txt
+    curl -I {{ UDA_CAPSTONE_URL }} >> ~/helloup/log.txt
 
 #- name: run script
 #  shell: |
