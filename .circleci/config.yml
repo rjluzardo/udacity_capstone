@@ -45,7 +45,7 @@ jobs:
             --region us-west-2 \
             --nodegroup-name udacaps-k8-nodes \
             --node-type t2.micro \
-            --nodes 2
+            --nodes 3
   
   deploy_k8_deployment:
     docker:  
@@ -143,18 +143,12 @@ workflows:
   default:
     jobs:
 #      - deploy_k8_cluster
-      - deploy_k8_deployment
+#      - deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
-      - deploy_client
+#      - deploy_client:
 #         requires: [deploy_k8_deployment]
-      - configure_client:
-           requires: [deploy_client]
-#      - test_connectivity:
-#          requires: [deploy_client]
-#      - send_logs:
-#          requires: [test_connectivity]
-#      - send_slack_alert:
-#          requires: [test_connectivity]
-#      
+#      - configure_client:
+#           requires: [deploy_client]
+      
 
 

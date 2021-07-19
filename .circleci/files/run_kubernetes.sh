@@ -4,11 +4,11 @@
 
 # Step 1:
 # This is your Docker ID/path
-dockerpath=rluzardo/app
+dockerpath=rluzardo/uda_cap_blue
 
 # Step 2
 # Run the Docker Hub container with kubernetes
-kubectl run kubernetes-udacity --image=$dockerpath --port=80
+kubectl run uda_cap_blue --image=$dockerpath --port=80
 
 #kubectl create deployment kubernetes-udacity --image=$dockerpath
 
@@ -23,4 +23,4 @@ kubectl run kubernetes-udacity --image=$dockerpath --port=80
 kubectl get pods
 
 # Step 4:
-kubectl port-forward kubernetes-udacity 8000:80
+kubectl port-forward uda_cap_blue 8000:80
