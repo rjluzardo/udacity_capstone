@@ -36,16 +36,16 @@
 #     aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
  
 - name: export service name
-    shell: |
-      kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'
-    register: service_url
+  shell: |
+    kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'
+  register: service_url
 
-    local_action: command echo item
-    service: service_url.stdout_lines
+  local_action: command echo item
+  service: service_url.stdout_lines
 
 - name: echo service
-    debug: var=service_url.stdout_lines
-    shell: curl -I var=service_url.stdout_lines
+  debug: var=service_url.stdout_lines
+  shell: curl -I var=service_url.stdout_lines
     
   #ignore_errors: true
 
