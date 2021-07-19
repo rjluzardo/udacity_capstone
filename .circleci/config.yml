@@ -142,7 +142,7 @@ jobs:
 workflows:
   default:
     jobs:
-#      - deploy_k8_cluster
+      - deploy_k8_cluster
 #      - deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
 #      - deploy_client:
