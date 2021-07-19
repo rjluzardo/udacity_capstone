@@ -42,7 +42,7 @@
 
 - name: test connectivity
   shell: |
-    curl -I "{{ UDA_CAPSTONE_URL }}"" >> ~/helloup/log.txt
+    curl -I "{{ UDA_CAPSTONE_URL }}" >> ~/helloup/log.txt
 
 #- name: run script
 #  shell: |
