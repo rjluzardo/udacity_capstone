@@ -37,7 +37,7 @@
  
 - name: export service name
   shell: |
-    kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'
+    ./kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'
   register: service_url
 
   local_action: command echo item
