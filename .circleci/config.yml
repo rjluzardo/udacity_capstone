@@ -88,7 +88,10 @@ jobs:
       - run:
           name: check variable      
           command: cat .circleci/files/uda_capstone_url.txt
-  
+      - persist_to_workspace:
+          root: .circleci/files
+          paths:
+            - uda_capstone_url.txt
   smoke-test:
       docker:
         - image: amazon/aws-cli
@@ -100,31 +103,22 @@ jobs:
               yum -y install tar gzip
               yum -y install curl
         - attach_workspace:
-            at: /tmp/.circleci/ansible
+            at: /tmp/.circleci/files/
         - run:
             name: Get backend url
             no_output_timeout: 30m
             command: |
-              UDA_CAPSTONE_URL=$(grep -v "[web]" /tmp/.circleci/ansible/inventory.txt)
-              echo "${BACKEND_IP}"
-              curl -Is http://${BACKEND_IP}:3030/api/status | head -n 1
-        - run:
-            name: Frontend smoke test.
-            command: |     
-              URL="http://udapeople-frontend-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-2.amazonaws.com"
-              echo $URL
-              if curl -s ${URL} | grep "Welcome"
+              UDA_CAPSTONE_URL=$(grep -v "[url]" /tmp/.circleci/files/uda_capstone_url.txt)
+              echo "${UDA_CAPSTONE_URL}"
+              curl -Is http://${UDA_CAPSTONE_URL}
+              if curl -s ${UDA_CAPSTONE_URL} | grep "Welcome"
                 then
+                echo "WORKS"
                   exit
                 else
                   exit
                 fi
-        - destroy-environment:
-            workflow_id: 
-        - revert-migrations:
-            workflow_id: ${CIRCLE_WORKFLOW_ID}          
-            # URL="http://udapeople-frontend-${CIRCLE_WORKFLOW_ID}.s3-DESTROY-TEST-website-us-west-2.amazonaws.com"
-            #URL="http://udapeople-frontend-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-2.amazonaws.com"
+
   deploy_client:
     docker:
       - image: amazon/aws-cli
@@ -189,6 +183,8 @@ workflows:
 #      - deploy_k8_cluster
       - deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
+      - smoke-test:
+            requires: [deploy_k8_deployment]
 #      - deploy_client:
 #         requires: [deploy_k8_deployment]
 #      - configure_client:
