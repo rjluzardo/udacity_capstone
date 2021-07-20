@@ -22,6 +22,17 @@ commands:
             aws cloudformation delete-stack --stack-name capstone-${CIRCLE_WORKFLOW_ID}
             echo capstone-${CIRCLE_WORKFLOW_ID}
             #exit 1
+  
+  destroy-deployment:
+    description: Destroy k8-environment
+    steps:
+      - run:
+          when: on_fail
+          name: delete deploy
+          command: |
+            ./kubectl delete deploy udacapblue-deployment
+            ./kubectl delete svc udacap-load-balancer
+
 
   destroy-cluster:
     description: Destroy cluster
@@ -111,7 +122,8 @@ jobs:
               cat /tmp/.circleci/files/uda_capstone_url.txt
               UDA_CAPSTONE_URL=$(cat /tmp/.circleci/files/uda_capstone_url.txt | grep -v "url")
               echo "${UDA_CAPSTONE_URL}"
-              curl -Is http://${UDA_CAPSTONE_URL}
+              curl -Is http://${UDA_CAPSTONE_URLxxx}          
+        - destroy-deployment
 
   deploy_client:
     docker:
