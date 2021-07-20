@@ -195,8 +195,8 @@ workflows:
 #      - sleep_60s:
 #           requires: [deploy_k8_deployment]
 #      - deploy_client:
-      - smoke-test
-#            requires: [sleep_60s]
+      - smoke-test:
+            requires: [deploy_k8_deployment]
 #      - deploy_client:
 #         requires: [deploy_k8_deployment]
 #      - configure_client:
