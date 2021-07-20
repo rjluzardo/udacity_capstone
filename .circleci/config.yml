@@ -110,9 +110,10 @@ jobs:
             name: Get SERVICE URL
 #            no_output_timeout: 30m
             command: |
-              UDA_CAPSTONE_URL=$(grep -v "[url]" /tmp/.circleci/files/uda_capstone_url.txt)
-              echo "${UDA_CAPSTONE_URL}"
-              curl -Is http://${UDA_CAPSTONE_URL}
+              cat /tmp/.circleci/files/uda_capstone_url.txt
+#             UDA_CAPSTONE_URL=$(grep -v "[url]" /tmp/.circleci/files/uda_capstone_url.txt)
+#              echo "${UDA_CAPSTONE_URL}"
+#              curl -Is http://${UDA_CAPSTONE_URL}
 
   deploy_client:
     docker:
