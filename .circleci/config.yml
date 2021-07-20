@@ -55,19 +55,7 @@ jobs:
             --region us-west-2 \
             --nodegroup-name udacaps-k8-nodes \
             --node-type t2.micro \
-            --nodes 3
-  
-  deploy_docker-image:
-    docker:
-      - image: python:3.7.3-stretch
-    steps:
-      - checkout
-      - run:
-          name: create docker image
-          command: |
-            chmod +x .circleci/files/blue/run_docker.sh
-            sh .circleci/files/blue/run_docker.sh
-          
+            --nodes 3          
   
   deploy_k8_deployment:
     docker:  
@@ -95,11 +83,48 @@ jobs:
             ./kubectl get pods
             ./kubectl get svc
             export UDA_CAPSTONE_URL=$(./kubectl get svc udacaphello-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
-            echo $UDA_CAPSTONE_URL >> ".circleci/files/.env"
+            echo "[url]" >> ".circleci/files/uda_capstone_url.txt"
+            echo $UDA_CAPSTONE_URL >> ".circleci/files/uda_capstone_url.txt"
       - run:
           name: check variable      
-          command: cat .circleci/files/.env
-
+          command: cat .circleci/files/uda_capstone_url.txt
+  
+  smoke-test:
+      docker:
+        - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: Install dependencies
+            command: |
+              yum -y install tar gzip
+              yum -y install curl
+        - attach_workspace:
+            at: /tmp/.circleci/ansible
+        - run:
+            name: Get backend url
+            no_output_timeout: 30m
+            command: |
+              UDA_CAPSTONE_URL=$(grep -v "[web]" /tmp/.circleci/ansible/inventory.txt)
+              echo "${BACKEND_IP}"
+              curl -Is http://${BACKEND_IP}:3030/api/status | head -n 1
+        - run:
+            name: Frontend smoke test.
+            command: |     
+              URL="http://udapeople-frontend-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-2.amazonaws.com"
+              echo $URL
+              if curl -s ${URL} | grep "Welcome"
+                then
+                  exit
+                else
+                  exit
+                fi
+        - destroy-environment:
+            workflow_id: 
+        - revert-migrations:
+            workflow_id: ${CIRCLE_WORKFLOW_ID}          
+            # URL="http://udapeople-frontend-${CIRCLE_WORKFLOW_ID}.s3-DESTROY-TEST-website-us-west-2.amazonaws.com"
+            #URL="http://udapeople-frontend-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-2.amazonaws.com"
   deploy_client:
     docker:
       - image: amazon/aws-cli
@@ -162,13 +187,12 @@ workflows:
   default:
     jobs:
 #      - deploy_k8_cluster
-      - deploy_docker-image
-#      - deploy_k8_deployment
+      - deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
-#      - deploy_client:
-#         requires: [deploy_k8_deployment]
-#      - configure_client:
-#           requires: [deploy_client]
+      - deploy_client:
+         requires: [deploy_k8_deployment]
+      - configure_client:
+           requires: [deploy_client]
       
 
 
