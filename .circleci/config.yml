@@ -113,13 +113,13 @@ jobs:
               UDA_CAPSTONE_URL=$(grep -v "[url]" /tmp/.circleci/files/uda_capstone_url.txt)
               echo "${UDA_CAPSTONE_URL}"
               curl -Is http://${UDA_CAPSTONE_URL}
-              if curl -s ${UDA_CAPSTONE_URL} | grep "Welcome"
-                then
-                echo "WORKS"
-                  exit
-                else
-                  exit
-                fi
+              #if curl -s ${UDA_CAPSTONE_URL} | grep "Welcome"
+              #  then
+              #    echo "WORKS"
+              #    exit
+              #  else
+              #    exit
+              #  fi
 
   deploy_client:
     docker:
