@@ -100,9 +100,6 @@ jobs:
           name: check variable      
           command: cat .circleci/files/.env
 
-
-
-
   deploy_client:
     docker:
       - image: amazon/aws-cli
@@ -164,7 +161,7 @@ jobs:
 workflows:
   default:
     jobs:
-      - deploy_k8_cluster
+#      - deploy_k8_cluster
       - deploy_docker-image
 #      - deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
