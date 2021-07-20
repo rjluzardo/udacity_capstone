@@ -76,8 +76,6 @@ jobs:
       - run: 
           name: check cluster status
           command: | 
-            pwd
-            ls -la
             aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
             ./kubectl cluster-info
             ./kubectl get nodes -o wide 
