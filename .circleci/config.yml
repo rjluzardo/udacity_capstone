@@ -124,7 +124,7 @@ jobs:
               cat /tmp/.circleci/files/uda_capstone_url.txt
               UDA_CAPSTONE_URL=$(cat /tmp/.circleci/files/uda_capstone_url.txt | grep -v "url")
               echo "${UDA_CAPSTONE_URL}"
-              curl -Is http://${UDA_CAPSTONE_URLxxx}          
+              curl -Is http://${UDA_CAPSTONE_URL}          
         - destroy-deployment
 
   deploy_client:
