@@ -27,7 +27,7 @@ commands:
     description: Destroy k8-environment
     steps:
       - run:
-          when: on_fail
+#          when: on_fail
           name: delete deploy
           command: |
             echo "**********INSTALLING KUBECTL*******" 
@@ -126,7 +126,7 @@ jobs:
               UDA_CAPSTONE_URL=$(cat /tmp/.circleci/files/uda_capstone_url.txt | grep -v "url")
               echo "${UDA_CAPSTONE_URL}"
               curl -Is http://${UDA_CAPSTONE_URL}       
-#        - destroy-deployment
+        - destroy-deployment
 
   deploy_client:
     docker:
