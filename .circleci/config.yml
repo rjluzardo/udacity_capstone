@@ -22,6 +22,16 @@ commands:
             aws cloudformation delete-stack --stack-name capstone-${CIRCLE_WORKFLOW_ID}
             echo capstone-${CIRCLE_WORKFLOW_ID}
             #exit 1
+
+  destroy-cluster:
+    description: Destroy cluster
+    steps:
+      - run:
+          name: Destroy nodegroups
+          command: eksctl delete nodegroup --cluster=k8-udacapstone --name=udacaps-k8-nodes
+      - run:
+          name: Destroy cluster
+          command: eksctl delete cluster --name=k8-udacapstone 
 jobs: 
   deploy_k8_cluster:
     docker:
