@@ -27,7 +27,7 @@ commands:
     description: Destroy k8-environment
     steps:
       - run:
-#          when: on_fail
+          when: on_fail
           name: delete deploy
           command: |
             echo "**********INSTALLING KUBECTL*******" 
@@ -105,7 +105,7 @@ jobs:
           root: .circleci/files
           paths:
             - uda_capstone_url.txt
-      - run: sleep 60;
+      - run: sleep 120;
 
   smoke-test:
       docker:
