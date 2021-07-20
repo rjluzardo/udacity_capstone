@@ -57,6 +57,18 @@ jobs:
             --node-type t2.micro \
             --nodes 3
   
+  deploy_docker-image:
+    docker:
+      - image: python:3.7.3-stretch
+    steps:
+      - checkout
+      - run:
+          name: create docker image
+          command: |
+            chmod +x .circleci/files/blue/run_docker.sh
+            .circleci/files/blue/run_docker.sh
+          
+  
   deploy_k8_deployment:
     docker:  
       - image: amazon/aws-cli
@@ -153,6 +165,7 @@ workflows:
   default:
     jobs:
       - deploy_k8_cluster
+      - deploy_docker-image
 #      - deploy_k8_deployment
 #          requires: [deploy_k8_cluster]
 #      - deploy_client:
