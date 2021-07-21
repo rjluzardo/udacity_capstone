@@ -160,8 +160,7 @@ jobs:
               cat /tmp/.circleci/files/udacap_blue_url.txt
               UDACAP_BLUE_URL=$(cat /tmp/.circleci/files/udacap_blue_url.txt| grep -v "url")
               echo "${UDACAP_BLUE_URL}"
-              curl -Is http://${UDACAP_BLUE_URL}       
-        - destroy-deployment
+              curl -Is http://${UDACAP_BLUE_URL}
 
   green-smoke-test:
       docker:
@@ -182,84 +181,18 @@ jobs:
               UDACAP_green_URL=$(cat /tmp/.circleci/files/udacap_green_url.txt| grep -v "url")
               echo "${UDACAP_GREEN_URL}"
               curl -Is http://${UDACAP_GREEN_URL}       
-        - destroy-deployment
+#        - destroy-deployment
 
-  deploy_client:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run:
-          name: creates infrastructure
-          command: |
-            aws cloudformation deploy --template-file .circleci/files/client.yml --tags project=udacity --stack-name capstone-${CIRCLE_WORKFLOW_ID} --parameter-overrides ID=client-${CIRCLE_WORKFLOW_ID} 
-      - run: 
-          command: |  
-            yum -y install tar gzip
-      - run:
-          name: Add back-end ip to ansible inventory
-          command: |
-            rm .circleci/ansible/inventory.txt # clears the inventory file to have only the existing instances
-            echo "[web]" > .circleci/ansible/inventory.txt
-            aws ec2 describe-instances \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --filters "Name=tag:project,Values=udacity" \
-              --output text >> .circleci/ansible/inventory.txt
-            cat .circleci/ansible/inventory.txt
-            ls ~/
-      - persist_to_workspace:
-          root: .circleci/ansible
-          paths:
-            - inventory.txt
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID}
-
-  configure_client:
-    docker:
-      - image: python:3.7-alpine3.11
-    steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints: ["41:6b:ff:3f:03:16:d6:a6:77:b9:d0:46:81:95:ca:83"]
-      - attach_workspace:
-          at: /tmp/.circleci/ansible
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --no-cache \
-                python3 \
-                py3-pip \
-            && pip3 install --upgrade pip \
-            && pip3 install \
-                awscli \
-            && rm -rf /var/cache/apk/*
-            apk add --update ansible     
-      - run:
-          name: Configure server
-          command: |
-            cat .circleci/ansible/inventory.txt
-            ansible-playbook -i /tmp/.circleci/ansible/inventory.txt .circleci/ansible/deploy-client.yml
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID}
           
 workflows:
   default:
     jobs:
-#      - deploy_k8_cluster
-      - deploy_blue_deployment
+#      - deploy_blue_deployment
       - deploy_green_deployment
-#          requires: [deploy_k8_cluster]
-#      - sleep_60s:
-#           requires: [deploy_k8_deployment]
-#      - deploy_client:
-      - blue-smoke-test:
-            requires: [deploy_blue_deployment]
+#      - blue-smoke-test:
+#            requires: [deploy_blue_deployment]
       - green-smoke-test:
             requires: [deploy_green_deployment]
-#      - deploy_client:
-#         requires: [deploy_k8_deployment]
-#      - configure_client:
-#           requires: [deploy_client]
       
 
 
