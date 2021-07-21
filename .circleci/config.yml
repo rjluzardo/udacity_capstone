@@ -22,6 +22,31 @@ commands:
             ./kubectl delete deploy udacapblue-deployment
             ./kubectl delete svc udacap-load-balancer
 
+  smoke-test:
+      docker:
+        - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: Install dependencies
+            command: |
+              yum -y install tar gzip
+              yum -y install curl
+        - attach_workspace:
+            at: /tmp/.circleci/files/
+        - run:
+            name: Get SERVICE URL
+            command: |
+              cat /tmp/.circleci/files/udacap_${COLOR}_url.txt
+              URL=$(cat /tmp/.circleci/files/udacap_${COLOR}_url.txt | grep -v "url")
+              echo "${URL}"
+              curl -Is http://${URL}
+              if curl -s http://${URL} | grep "Welcome"
+                then
+                  PROD_ENV=BLUE
+                else
+                  exit
+                fi
 
   destroy-cluster:
     description: Destroy cluster
@@ -146,12 +171,15 @@ jobs:
               UDACAP_BLUE_URL=$(cat /tmp/.circleci/files/udacap_blue_url.txt | grep -v "url")
               echo "${UDACAP_BLUE_URL}"
               curl -Is http://${UDACAP_BLUE_URL}
-              if curl -s http://${UDACAP_BLUE_URL} | grep "Welcome"
+              if curl -s http://${UDACAP_BLUE_URL} | grep "Hello"
                 then
                   PROD_ENV=BLUE
+                  PROD_URL=http://${UDACAP_BLUE_URL}
                 else
                   exit
                 fi
+              echo $PROD_ENV
+              echo $PROD_URL
   green-smoke-test:
       docker:
         - image: amazon/aws-cli
