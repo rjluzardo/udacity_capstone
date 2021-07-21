@@ -158,7 +158,7 @@ jobs:
             name: Get SERVICE URL
             command: |
               cat /tmp/.circleci/files/udacap_blue_url.txt
-              UDACAP_BLUE_URL=$(cat /tmp/.circleci/files/udacap_blue_url.txt| grep -v "url")
+              UDACAP_BLUE_URL=$(cat /tmp/.circleci/files/udacap_blue_url.txt | grep -v "url")
               echo "${UDACAP_BLUE_URL}"
               curl -Is http://${UDACAP_BLUE_URL}
 
@@ -178,7 +178,7 @@ jobs:
             name: Get SERVICE URL
             command: |
               cat /tmp/.circleci/files/udacap_green_url.txt
-              UDACAP_green_URL=$(cat /tmp/.circleci/files/udacap_green_url.txt| grep -v "url")
+              UDACAP_GREEN_URL=$(cat /tmp/.circleci/files/udacap_green_url.txt | grep -v "url")
               echo "${UDACAP_GREEN_URL}"
               curl -Is http://${UDACAP_GREEN_URL}       
 #        - destroy-deployment
