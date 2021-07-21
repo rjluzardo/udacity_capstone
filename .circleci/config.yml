@@ -127,7 +127,7 @@ jobs:
             aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
             ./kubectl cluster-info
             ./kubectl get nodes -o wide 
-            ./kubectl apply -f .circleci/files/udacapgreen-dep.yml
+            ./kubectl apply -f .circleci/files/green/udacapgreen-dep.yml
             ./kubectl get pods
             ./kubectl get svc
             export UDA_CAPSTONE_URL=$(./kubectl get svc udacapgreen-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
