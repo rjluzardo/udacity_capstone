@@ -1,34 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: udacapblue-deployment
+  name: udacapgreen-deployment
   labels:
-    app: udacapblue
+    app: udacapgreen
 spec:
   progressDeadlineSeconds: 900
   replicas: 1
   selector:
     matchLabels:
-      app: udacapblue
+      app: udacapgreen
   template:
     metadata:
      labels:
-        app: udacapblue
+        app: udacapgreen
     spec:
       containers:
-      - name: udacapblue
-        image: rluzardo/uda_cap_blue
+      - name: udacapgreen
+        image: rluzardo/uda_cap_green
         ports:
         - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: udacapblue-lb
+  name: udacapgreen-lb
 spec:
   type: LoadBalancer
   selector:
-    app: udacapblue
+    app: udacapgreen
   ports:
   - protocol: TCP
     port: 80

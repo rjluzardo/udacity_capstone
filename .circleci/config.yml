@@ -92,7 +92,7 @@ jobs:
             aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
             ./kubectl cluster-info
             ./kubectl get nodes -o wide 
-            ./kubectl apply -f .circleci/files/udacapblue-dep.yml
+            ./kubectl apply -f .circleci/files/blue/udacapblue-dep.yml
             ./kubectl get pods
             ./kubectl get svc
             export UDACAP_BLUE_URL=$(./kubectl get svc udacapblue-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
@@ -127,19 +127,19 @@ jobs:
             aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
             ./kubectl cluster-info
             ./kubectl get nodes -o wide 
-            ./kubectl apply -f .circleci/files/uda-capstone-dep.yml
+            ./kubectl apply -f .circleci/files/udacapgreen-dep.yml
             ./kubectl get pods
             ./kubectl get svc
-            export UDA_CAPSTONE_URL=$(./kubectl get svc udacap-load-balancer -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
-            echo "[url]" >> ".circleci/files/uda_capstone_url.txt"
-            echo $UDA_CAPSTONE_URL >> ".circleci/files/uda_capstone_url.txt"
+            export UDA_CAPSTONE_URL=$(./kubectl get svc udacapgreen-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
+            echo "[url]" >> ".circleci/files/udacap_green_url.txt"
+            echo $UDA_CAPSTONE_URL >> ".circleci/files/udacap_green_url.txt"
       - run:
           name: check variable      
-          command: cat .circleci/files/uda_capstone_url.txt
+          command: cat .circleci/files/udacap_green_url.txt
       - persist_to_workspace:
           root: .circleci/files
           paths:
-            - uda_capstone_url.txt
+            - udacap_green_url.txt
       - run: sleep 90;
 
   smoke-test:
@@ -226,7 +226,7 @@ workflows:
     jobs:
 #      - deploy_k8_cluster
       - deploy_blue_deployment
-#      - deploy_green_deployment
+      - deploy_green_deployment
 #          requires: [deploy_k8_cluster]
 #      - sleep_60s:
 #           requires: [deploy_k8_deployment]
