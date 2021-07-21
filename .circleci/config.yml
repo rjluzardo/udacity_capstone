@@ -100,7 +100,7 @@ jobs:
             echo $UDACAP_BLUE_URL>> ".circleci/files/udacap_blue_url.txt"
       - run:
           name: check variable      
-          command: cat .circleci/files/uda_capstone_url.txt
+          command: cat .circleci/files/udacap_blue_url.txt
       - persist_to_workspace:
           root: .circleci/files
           paths:
