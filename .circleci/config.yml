@@ -163,7 +163,7 @@ jobs:
               curl -Is http://${UDACAP_BLUE_URL}       
         - destroy-deployment
 
-  greem-smoke-test:
+  green-smoke-test:
       docker:
         - image: amazon/aws-cli
       steps:
@@ -252,8 +252,10 @@ workflows:
 #      - sleep_60s:
 #           requires: [deploy_k8_deployment]
 #      - deploy_client:
-      - smoke-test:
+      - blue-smoke-test:
             requires: [deploy_blue_deployment]
+      - green-smoke-test:
+            requires: [deploy_green_deployment]
 #      - deploy_client:
 #         requires: [deploy_k8_deployment]
 #      - configure_client:
