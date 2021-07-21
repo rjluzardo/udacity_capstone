@@ -104,7 +104,7 @@ jobs:
       - persist_to_workspace:
           root: .circleci/files
           paths:
-            - uda_capstone_url.txt
+            - udacap_blue_url.txt
       - run: sleep 90;
 
   deploy_green_deployment:
