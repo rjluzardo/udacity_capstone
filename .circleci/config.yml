@@ -161,7 +161,12 @@ jobs:
               UDACAP_BLUE_URL=$(cat /tmp/.circleci/files/udacap_blue_url.txt | grep -v "url")
               echo "${UDACAP_BLUE_URL}"
               curl -Is http://${UDACAP_BLUE_URL}
-
+              if curl -s http://${UDACAP_BLUE_URL} | grep "Welcome"
+                then
+                  PROD_ENV=BLUE
+                else
+                  exit
+                fi
   green-smoke-test:
       docker:
         - image: amazon/aws-cli
