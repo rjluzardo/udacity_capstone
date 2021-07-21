@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: udacapgreen
-        image: rluzardo/uda_cap_green
+        image: rluzardo/udacap_green
         ports:
         - containerPort: 80
 ---
