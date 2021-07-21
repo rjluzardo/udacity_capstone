@@ -4,9 +4,6 @@ FROM nginx
 RUN rm /usr/share/nginx/html/index.html
 
 ## Step 2:
-
-RUN echo "checking"
+# Copy source code to working directory
 COPY index.html /usr/share/nginx/html
 
-## Step 4:
-EXPOSE 80

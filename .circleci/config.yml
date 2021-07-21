@@ -72,7 +72,42 @@ jobs:
             --node-type t2.micro \
             --nodes 3          
   
-  deploy_k8_deployment:
+  deploy_blue_deployment:
+    docker:  
+      - image: amazon/aws-cli
+    steps:
+      - checkout   
+      - run:
+          name: Install dependencies
+          command: |
+            echo "**********INSTALLING KUBECTL*******" 
+            curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            echo "**********INSTALLING TAR*******"
+            yum -y install tar gzip
+
+      - run: 
+          name: check cluster status
+          command: | 
+            aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
+            ./kubectl cluster-info
+            ./kubectl get nodes -o wide 
+            ./kubectl apply -f .circleci/files/udacapblue-dep.yml
+            ./kubectl get pods
+            ./kubectl get svc
+            export UDACAP_BLUE_URL=$(./kubectl get svc udacapblue-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
+            echo "[url]" >> ".circleci/files/udacap_blue_url.txt"
+            echo $UDACAP_BLUE_URL>> ".circleci/files/udacap_blue_url.txt"
+      - run:
+          name: check variable      
+          command: cat .circleci/files/uda_capstone_url.txt
+      - persist_to_workspace:
+          root: .circleci/files
+          paths:
+            - uda_capstone_url.txt
+      - run: sleep 90;
+
+  deploy_green_deployment:
     docker:  
       - image: amazon/aws-cli
     steps:
@@ -122,10 +157,10 @@ jobs:
         - run:
             name: Get SERVICE URL
             command: |
-              cat /tmp/.circleci/files/uda_capstone_url.txt
-              UDA_CAPSTONE_URL=$(cat /tmp/.circleci/files/uda_capstone_url.txt | grep -v "url")
-              echo "${UDA_CAPSTONE_URL}"
-              curl -Is http://${UDA_CAPSTONE_URL}       
+              cat /tmp/.circleci/files/udacap_blue_url.txt
+              UDACAP_BLUE_URL=$(cat /tmp/.circleci/files/udacap_blue_url.txt| grep -v "url")
+              echo "${UDACAP_BLUE_URL}"
+              curl -Is http://${UDACAP_BLUE_URL}       
         - destroy-deployment
 
   deploy_client:
@@ -190,13 +225,14 @@ workflows:
   default:
     jobs:
 #      - deploy_k8_cluster
-      - deploy_k8_deployment
+      - deploy_blue_deployment
+#      - deploy_green_deployment
 #          requires: [deploy_k8_cluster]
 #      - sleep_60s:
 #           requires: [deploy_k8_deployment]
 #      - deploy_client:
       - smoke-test:
-            requires: [deploy_k8_deployment]
+            requires: [deploy_blue_deployment]
 #      - deploy_client:
 #         requires: [deploy_k8_deployment]
 #      - configure_client:
