@@ -23,8 +23,6 @@ commands:
             ./kubectl delete svc udacap-load-balancer
 
   smoke-test:
-      docker:
-        - image: amazon/aws-cli
       steps:
         - checkout
         - run:
