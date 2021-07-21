@@ -8,22 +8,7 @@ orbs:
 
 commands:
   
-  destroy-environment:
-    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
-    parameters:
-      workflow_id:
-        type: string
-    steps:
-      - run:
-          name: Destroy environments
-          no_output_timeout: 30m
-          when: on_fail
-          command: |
-            aws cloudformation delete-stack --stack-name capstone-${CIRCLE_WORKFLOW_ID}
-            echo capstone-${CIRCLE_WORKFLOW_ID}
-            #exit 1
-  
-  destroy-deployment:
+  destroy-k8-deployment:
     description: Destroy k8-environment
     steps:
       - run:
@@ -192,10 +177,10 @@ jobs:
 workflows:
   default:
     jobs:
-#      - deploy_blue_deployment
-      - deploy_green_deployment
-#      - blue-smoke-test:
-#            requires: [deploy_blue_deployment]
+      - deploy_blue_deployment
+#      - deploy_green_deployment
+      - blue-smoke-test:
+            requires: [deploy_blue_deployment]
       - green-smoke-test:
             requires: [deploy_green_deployment]
       
