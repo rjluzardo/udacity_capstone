@@ -142,7 +142,7 @@ jobs:
             - udacap_green_url.txt
       - run: sleep 90;
 
-  smoke-test:
+  blue-smoke-test:
       docker:
         - image: amazon/aws-cli
       steps:
@@ -161,6 +161,27 @@ jobs:
               UDACAP_BLUE_URL=$(cat /tmp/.circleci/files/udacap_blue_url.txt| grep -v "url")
               echo "${UDACAP_BLUE_URL}"
               curl -Is http://${UDACAP_BLUE_URL}       
+        - destroy-deployment
+
+  greem-smoke-test:
+      docker:
+        - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: Install dependencies
+            command: |
+              yum -y install tar gzip
+              yum -y install curl
+        - attach_workspace:
+            at: /tmp/.circleci/files/
+        - run:
+            name: Get SERVICE URL
+            command: |
+              cat /tmp/.circleci/files/udacap_green_url.txt
+              UDACAP_green_URL=$(cat /tmp/.circleci/files/udacap_green_url.txt| grep -v "url")
+              echo "${UDACAP_GREEN_URL}"
+              curl -Is http://${UDACAP_GREEN_URL}       
         - destroy-deployment
 
   deploy_client:
