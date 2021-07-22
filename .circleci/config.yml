@@ -179,7 +179,7 @@ jobs:
               if curl -s http://${UDACAP_GREEN_URL} | grep "Hello"
                 then
                   PROD_ENV=GREEN
-                  PROD_URL=http://${UDACAP_GREEN_URL
+                  PROD_URL=http://${UDACAP_GREEN_URL}
                 else
                   exit
                 fi
