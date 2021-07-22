@@ -22,29 +22,6 @@ commands:
             ./kubectl delete deploy udacapblue-deployment
             ./kubectl delete svc udacap-load-balancer
 
-  smoke-test:
-      steps:
-        - checkout
-        - run:
-            name: Install dependencies
-            command: |
-              yum -y install tar gzip
-              yum -y install curl
-        - attach_workspace:
-            at: /tmp/.circleci/files/
-        - run:
-            name: Get SERVICE URL
-            command: |
-              cat /tmp/.circleci/files/udacap_${COLOR}_url.txt
-              URL=$(cat /tmp/.circleci/files/udacap_${COLOR}_url.txt | grep -v "url")
-              echo "${URL}"
-              curl -Is http://${URL}
-              if curl -s http://${URL} | grep "Welcome"
-                then
-                  PROD_ENV=BLUE
-                else
-                  exit
-                fi
 
   destroy-cluster:
     description: Destroy cluster
@@ -101,9 +78,10 @@ jobs:
             ./kubectl cluster-info
             ./kubectl get nodes -o wide 
             ./kubectl apply -f .circleci/files/blue/udacapblue-dep.yml
+            /.kubectl apply -f .circleci/files/udacap-act-lb.yml
             ./kubectl get pods
             ./kubectl get svc
-            export UDACAP_BLUE_URL=$(./kubectl get svc udacapblue-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
+            export UDACAP_BLUE_URL=$(./kubectl get svc udacapact-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
             echo "[url]" >> ".circleci/files/udacap_blue_url.txt"
             echo $UDACAP_BLUE_URL>> ".circleci/files/udacap_blue_url.txt"
       - run:
@@ -136,9 +114,10 @@ jobs:
             ./kubectl cluster-info
             ./kubectl get nodes -o wide 
             ./kubectl apply -f .circleci/files/green/udacapgreen-dep.yml
+            /.kubectl apply -f .circleci/files/udacap-pas-lb.yml
             ./kubectl get pods
             ./kubectl get svc
-            export UDA_CAPSTONE_URL=$(./kubectl get svc udacapgreen-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
+            export UDA_CAPSTONE_URL=$(./kubectl get svc udacap-pas-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
             echo "[url]" >> ".circleci/files/udacap_green_url.txt"
             echo $UDA_CAPSTONE_URL >> ".circleci/files/udacap_green_url.txt"
       - run:
@@ -204,11 +183,11 @@ workflows:
   default:
     jobs:
       - deploy_blue_deployment
-#      - deploy_green_deployment
+      - deploy_green_deployment
       - blue-smoke-test:
             requires: [deploy_blue_deployment]
-#      - green-smoke-test:
-#            requires: [deploy_green_deployment]
+      - green-smoke-test:
+            requires: [deploy_green_deployment]
       
 
 
