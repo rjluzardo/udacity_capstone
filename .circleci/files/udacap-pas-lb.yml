@@ -7,7 +7,7 @@ spec:
   type: LoadBalancer
   selector:
     app: udacapgreen
-ports:
+  ports:
   - port: 80
     targetPort: 80
     protocol: TCP
