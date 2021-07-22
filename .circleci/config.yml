@@ -183,14 +183,14 @@ jobs:
               curl -Is http://${UDACAP_GREEN_URL}
               if curl -s http://${UDACAP_GREEN_URL} | grep "Hello"
                 then
+                  ./kubectl delete svc udacap-pas-lb
                   ./kubectl patch service udacap-act-lb -p '{"spec":{"selector":{"app": "udacapgreen"}}}'
                   PROD_ENV=GREEN
-                  PROD_URL=http://${UDACAP_GREEN_URL}
                 else
                   exit
                 fi
-              echo "Running Environment is "$PROD_ENV" 
-              echo "on the URL" $PROD_URL     
+#              echo "Running Environment is "$PROD_ENV" 
+#              echo "on the URL" $PROD_URL     
 #        - destroy-deployment
 
           
