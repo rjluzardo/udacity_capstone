@@ -136,7 +136,8 @@ jobs:
         - checkout
         - run:
             name: Install dependencies
-            command: |
+            command: |  
+              echo "**********INSTALLING TAR*******"
               yum -y install tar gzip
               yum -y install curl
         - attach_workspace:
@@ -165,6 +166,10 @@ jobs:
         - run:
             name: Install dependencies
             command: |
+              echo "**********INSTALLING KUBECTL*******" 
+              curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
+              chmod +x ./kubectl
+              echo "**********INSTALLING TAR*******"
               yum -y install tar gzip
               yum -y install curl
         - attach_workspace:
@@ -178,13 +183,14 @@ jobs:
               curl -Is http://${UDACAP_GREEN_URL}
               if curl -s http://${UDACAP_GREEN_URL} | grep "Hello"
                 then
+                  kubectl patch service udacap-act-lb -p '{"spec":{"selector":{"app": "udacapgreen"}}}'
                   PROD_ENV=GREEN
                   PROD_URL=http://${UDACAP_GREEN_URL}
                 else
                   exit
                 fi
-              echo $PROD_ENV
-              echo $PROD_URL     
+              echo "Running Environment is "$PROD_ENV" 
+              echo "on the URL" $PROD_URL     
 #        - destroy-deployment
 
           
