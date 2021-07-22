@@ -81,7 +81,7 @@ jobs:
             ./kubectl apply -f .circleci/files/udacap-act-lb.yml
             ./kubectl get pods
             ./kubectl get svc
-            export UDACAP_BLUE_URL=$(./kubectl get svc udacapact-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
+            export UDACAP_BLUE_URL=$(./kubectl get svc udacap-act-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
             echo "[url]" >> ".circleci/files/udacap_blue_url.txt"
             echo $UDACAP_BLUE_URL>> ".circleci/files/udacap_blue_url.txt"
       - run:
@@ -175,7 +175,17 @@ jobs:
               cat /tmp/.circleci/files/udacap_green_url.txt
               UDACAP_GREEN_URL=$(cat /tmp/.circleci/files/udacap_green_url.txt | grep -v "url")
               echo "${UDACAP_GREEN_URL}"
-              curl -Is http://${UDACAP_GREEN_URL}       
+              curl -Is http://${UDACAP_GREEN_URL}
+              if curl -s http://${UDACAP_GREEN_URL} | grep "Hello"
+                then
+                  PROD_ENV=GREEN
+#                  kubectl patch service udacap-act-lb -p '{"spec":{"selector":{"app": "udacapgreen"}}}'
+                  PROD_URL=http://${UDACAP_GREEN_URL
+                else
+                  exit
+                fi
+              echo $PROD_ENV
+              echo $PROD_URL     
 #        - destroy-deployment
 
           
