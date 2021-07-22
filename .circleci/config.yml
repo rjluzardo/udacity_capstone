@@ -183,7 +183,7 @@ jobs:
               curl -Is http://${UDACAP_GREEN_URL}
               if curl -s http://${UDACAP_GREEN_URL} | grep "Hello"
                 then
-                  kubectl patch service udacap-act-lb -p '{"spec":{"selector":{"app": "udacapgreen"}}}'
+                  ./kubectl patch service udacap-act-lb -p '{"spec":{"selector":{"app": "udacapgreen"}}}'
                   PROD_ENV=GREEN
                   PROD_URL=http://${UDACAP_GREEN_URL}
                 else
