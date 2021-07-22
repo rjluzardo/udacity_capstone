@@ -78,7 +78,7 @@ jobs:
             ./kubectl cluster-info
             ./kubectl get nodes -o wide 
             ./kubectl apply -f .circleci/files/blue/udacapblue-dep.yml
-            /.kubectl apply -f .circleci/files/udacap-act-lb.yml
+            ./kubectl apply -f .circleci/files/udacap-act-lb.yml
             ./kubectl get pods
             ./kubectl get svc
             export UDACAP_BLUE_URL=$(./kubectl get svc udacapact-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
@@ -114,7 +114,7 @@ jobs:
             ./kubectl cluster-info
             ./kubectl get nodes -o wide 
             ./kubectl apply -f .circleci/files/green/udacapgreen-dep.yml
-            /.kubectl apply -f .circleci/files/udacap-pas-lb.yml
+            ./kubectl apply -f .circleci/files/udacap-pas-lb.yml
             ./kubectl get pods
             ./kubectl get svc
             export UDA_CAPSTONE_URL=$(./kubectl get svc udacap-pas-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
