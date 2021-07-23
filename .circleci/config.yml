@@ -157,7 +157,7 @@ jobs:
                   exit
                 fi
               echo $ACT_ENV
-              echo $PROD_URL
+              echo $ACT_URL
   green-smoke-test:
       docker:
         - image: amazon/aws-cli
@@ -184,8 +184,8 @@ jobs:
               if curl -s http://${UDACAP_GREEN_URL} | grep "Hello"
                 then
                   aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
-                  ACT_ENV = udacapgreen
-                  PAS_ENV = udacapblue
+                  ACT_ENV=udacapgreen
+                  PAS_ENV=udacapblue
                   ./kubectl delete svc ${PAS_ENV}
                   ./kubectl patch service udacap-act-lb -p '{"spec":{"selector":{"app": udacapgreen}}}'
                   export ACT_URL=$(./kubectl get svc udacap-act-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
