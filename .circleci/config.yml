@@ -190,7 +190,7 @@ jobs:
                 else
                   exit
                 fi
-              echo "Running Environment is "$PROD_ENV" 
+              echo "Running Environment is" $PROD_ENV
               echo "on the URL" $PROD_URL     
         - destroy-k8-deployment
   cleanup:
