@@ -151,12 +151,12 @@ jobs:
               curl -Is http://${UDACAP_BLUE_URL}
               if curl -s http://${UDACAP_BLUE_URL} | grep "Hello"
                 then
-                  PROD_ENV=BLUE
-                  PROD_URL=http://${UDACAP_BLUE_URL}
+                  ACT_ENV=udacapblue-deployment
+                  ACT_URL=http://${UDACAP_BLUE_URL}
                 else
                   exit
                 fi
-              echo $PROD_ENV
+              echo $ACT_ENV
               echo $PROD_URL
   green-smoke-test:
       docker:
@@ -175,7 +175,7 @@ jobs:
         - attach_workspace:
             at: /tmp/.circleci/files/
         - run:
-            name: Get SERVICE URL
+            name: smoke and migrate
             command: |
               cat /tmp/.circleci/files/udacap_green_url.txt
               UDACAP_GREEN_URL=$(cat /tmp/.circleci/files/udacap_green_url.txt | grep -v "url")
@@ -184,15 +184,16 @@ jobs:
               if curl -s http://${UDACAP_GREEN_URL} | grep "Hello"
                 then
                   aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
-                  ./kubectl delete svc udacap-pas-lb
-                  ./kubectl patch service udacap-act-lb -p '{"spec":{"selector":{"app": "udacapgreen"}}}'
-                  PROD_ENV=GREEN
-                  export PROD_URL=$(./kubectl get svc udacap-act-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
+                  ACT_ENV = udacapgreen
+                  PAS_ENV = udacapblue
+                  ./kubectl delete svc ${PAS_ENV}
+                  ./kubectl patch service udacap-act-lb -p '{"spec":{"selector":{"app": ${ACT_ENV}}}}'
+                  export ACT_URL=$(./kubectl get svc udacap-act-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
                 else
                   exit
                 fi
-              echo "Running Environment is" $PROD_ENV
-              echo "on the URL" $PROD_URL     
+              echo "Running Environment is" $ACT_ENV
+              echo "on the URL" $ACT_URL     
         - destroy-k8-deployment
   cleanup:
       docker:
@@ -209,7 +210,7 @@ jobs:
             name: Delete Blue
             command: |
                   aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
-                  ./kubectl delete deploy udacapblue-deployment
+                  ./kubectl delete deploy ${PAS_ENV}-deployment
 
           
 workflows:
