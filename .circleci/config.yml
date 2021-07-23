@@ -187,7 +187,7 @@ jobs:
                   ACT_ENV = udacapgreen
                   PAS_ENV = udacapblue
                   ./kubectl delete svc ${PAS_ENV}
-                  ./kubectl patch service udacap-act-lb -p '{"spec":{"selector":{"app": ${ACT_ENV}}}}'
+                  ./kubectl patch service udacap-act-lb -p '{"spec":{"selector":{"app": udacapgreen}}}'
                   export ACT_URL=$(./kubectl get svc udacap-act-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
                 else
                   exit
