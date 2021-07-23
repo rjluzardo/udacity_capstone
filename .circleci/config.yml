@@ -19,8 +19,8 @@ commands:
             curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
             chmod +x ./kubectl
             aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
-            ./kubectl delete deploy udacapblue-deployment
-            ./kubectl delete svc udacap-load-balancer
+            ./kubectl delete deploy udacapgreen-deployment
+            ./kubectl delete svc udacap-pas-lb
 
 
   destroy-cluster:
@@ -186,7 +186,7 @@ jobs:
                   aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
                   ACT_ENV=udacapgreen
                   PAS_ENV=udacapblue
-                  ./kubectl delete svc ${PAS_ENV}
+                  ./kubectl delete svc udacap-pas-lb
                   ./kubectl patch service udacap-act-lb -p '{"spec":{"selector":{"app": udacapgreen}}}'
                   export ACT_URL=$(./kubectl get svc udacap-act-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
                 else
