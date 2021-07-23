@@ -208,7 +208,7 @@ jobs:
             name: Delete Blue
             command: |
                   aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
-                  ./kubectl delete deploy udacapblue
+                  ./kubectl delete deploy udacapblue-deployment
 
           
 workflows:
