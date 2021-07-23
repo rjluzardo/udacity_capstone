@@ -192,7 +192,7 @@ jobs:
                 fi
               echo "Running Environment is "$PROD_ENV" 
               echo "on the URL" $PROD_URL     
-        - destroy-deployment
+        - destroy-k8-deployment
   cleanup:
       docker:
         - image: amazon/aws-cli
