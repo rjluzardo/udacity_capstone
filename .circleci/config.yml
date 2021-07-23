@@ -12,7 +12,7 @@ commands:
     description: Destroy k8-environment
     steps:
       - run:
-#          when: on_fail
+          when: on_fail
           name: delete deploy
           command: |
             echo "**********INSTALLING KUBECTL*******" 
