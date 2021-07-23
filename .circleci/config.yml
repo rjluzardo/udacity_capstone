@@ -22,19 +22,6 @@ commands:
             ./kubectl delete deploy udacapblue-deployment
             ./kubectl delete svc udacap-load-balancer
 
-<<defaults: &install_dependencies
-  docker:
-    - image: amazon/aws-cli
-    - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            echo "**********INSTALLING KUBECTL*******" 
-            curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
-            chmod +x ./kubectl
-            echo "**********INSTALLING TAR*******"
-            yum -y install tar gzip
-            yum -y install curl
 
   destroy-cluster:
     description: Destroy cluster
@@ -71,19 +58,18 @@ jobs:
             --nodes 3          
   
   deploy_blue_deployment:
-    <<: *install_dependencies
-#    docker:  
-#      - image: amazon/aws-cli
+    docker:  
+      - image: amazon/aws-cli
     steps:
-#      - checkout   
-#      - run:
-#          name: Install dependencies
-#          command: |
-#            echo "**********INSTALLING KUBECTL*******" 
-#            curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
-#            chmod +x ./kubectl
-#            echo "**********INSTALLING TAR*******"
-#            yum -y install tar gzip
+      - checkout   
+      - run:
+          name: Install dependencies
+          command: |
+            echo "**********INSTALLING KUBECTL*******" 
+            curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
+            chmod +x ./kubectl
+            echo "**********INSTALLING TAR*******"
+            yum -y install tar gzip
 
       - run: 
           name: check cluster status
@@ -207,7 +193,22 @@ jobs:
               echo "Running Environment is "$PROD_ENV" 
               echo "on the URL" $PROD_URL     
         - destroy-deployment
-
+  cleanup:
+      docker:
+        - image: amazon/aws-cli
+      steps:
+        - checkout
+        - run:
+            name: Install dependencies
+            command: |
+              echo "**********INSTALLING KUBECTL*******" 
+              curl -o kubectl https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl
+              chmod +x ./kubectl
+        - run:
+            name: Delete Blue
+            command: |
+                  aws eks --region us-west-2 update-kubeconfig --name k8-udacapstone
+                  ./kubectl delete deploy udacapblue
 
           
 workflows:
@@ -219,6 +220,7 @@ workflows:
             requires: [deploy_blue_deployment]
       - green-smoke-test:
             requires: [deploy_green_deployment]
-#      - cleanup
+      - cleanup:
+            requires: [green-smoke-test]
 
 
