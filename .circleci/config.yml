@@ -222,8 +222,11 @@ jobs:
 workflows:
   default:
     jobs:
-      - deploy_blue_deployment
-      - deploy_green_deployment
+      - deploy_k8_cluster
+      - deploy_blue_deployment:
+          requires: [deploy_k8_cluster]
+      - deploy_green_deployment:
+          requires: [deploy_k8_cluster]
       - blue-smoke-test:
             requires: [deploy_blue_deployment]
       - green-smoke-test:
