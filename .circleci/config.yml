@@ -56,16 +56,15 @@ jobs:
             --node-type t2.micro \
             --nodes 3          
 
-  linting_dockerfile:
+  linting:
     docker:
       - image: python:3.7.3-stretch
 
-      #working_directory: .circleci/files/
+    working_directory: .circleci/files/
 
     steps:
       - checkout
 
-      # Download and cache dependencies
       - run:
           name: whereami
           command: |
@@ -74,7 +73,6 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "requirements.txt" }}
-            # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
       - run:
@@ -91,7 +89,6 @@ jobs:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
-      # run lint!
       - run:
           name: run lint
           command: |
@@ -265,13 +262,14 @@ workflows:
   default:
     jobs:
       #- deploy_k8_cluster
-      - deploy_blue_deployment
+      - linting
+      #- deploy_blue_deployment
           #requires: [deploy_k8_cluster]
-      - deploy_green_deployment
+      #- deploy_green_deployment
           #requires: [deploy_k8_cluster]
-      - blue-smoke-test:
-            requires: [deploy_blue_deployment]
-      - green-smoke-test:
-            requires: [deploy_green_deployment, blue-smoke-test]
-      - cleanup:
-            requires: [green-smoke-test]
+      #- blue-smoke-test:
+      #      requires: [deploy_blue_deployment]
+      #- green-smoke-test:
+      #      requires: [deploy_green_deployment, blue-smoke-test]
+      #- cleanup:
+      #      requires: [green-smoke-test]
