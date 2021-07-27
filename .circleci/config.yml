@@ -157,7 +157,7 @@ jobs:
   
   publish-blue-latest:
     environment:
-      IMAGE_NAME: building-on-ci
+      IMAGE_NAME: udacap_blue
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
@@ -184,7 +184,7 @@ jobs:
   
   publish-green-latest:
     environment:
-      IMAGE_NAME: building-on-ci
+      IMAGE_NAME: udacap_green
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
