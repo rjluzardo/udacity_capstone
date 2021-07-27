@@ -157,20 +157,6 @@ jobs:
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             docker tag $IMAGE_NAME rluzardo/$IMAGE_NAME
             docker push rluzardo/$IMAGE_NAME
-  
-  docker-publish-blue:
-    environment:
-      IMAGE_NAME: udacap_blue
-    docker:
-      - image: circleci/buildpack-deps:stretch
-    steps:
-      - setup_remote_docker
-      - run:
-          name: Publish Docker Image to Docker Hub
-          command: |
-            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-            docker tag $IMAGE_NAME rluzardo/$IMAGE_NAME
-            docker push rluzardo/$IMAGE_NAME
 
   docker-image-green:
     environment:
@@ -188,22 +174,6 @@ jobs:
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             docker tag $IMAGE_NAME rluzardo/$IMAGE_NAME
             docker push rluzardo/$IMAGE_NAME
-
-  
-  docker-publish-green:
-    environment:
-      IMAGE_NAME: udacap_green
-    docker:
-      - image: circleci/buildpack-deps:stretch
-    steps:
-      - setup_remote_docker
-      - run:
-          name: Publish Docker Image to Docker Hub
-          command: |
-            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-            docker tag $IMAGE_NAME rluzardo/$IMAGE_NAME
-            docker push rluzardo/$IMAGE_NAME
-
 
   deploy_blue_deployment:
     docker:  
@@ -339,6 +309,7 @@ jobs:
                   PAS_ENV=udacapblue
                   ./kubectl delete svc udacap-pas-lb
                   ./kubectl patch service udacap-act-lb -p '{"spec":{"selector":{"app": "udacapgreen"}}}'
+                  sleep 90;
                   export ACT_URL=$(./kubectl get svc udacap-act-lb -o jsonpath='{.status.loadBalancer.ingress[*].hostname}') 
                 else
                   exit
