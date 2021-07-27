@@ -72,7 +72,7 @@ jobs:
             ls -la
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "requirements.txt" }}
+            - v1-dependencies-{{ checksum ".circleci/files/requirements.txt" }}
             - v1-dependencies-
 
       - run:
