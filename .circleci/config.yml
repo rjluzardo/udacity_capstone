@@ -56,11 +56,10 @@ jobs:
             --node-type t2.micro \
             --nodes 3          
 
-  linting blue:
+  linting-blue:
     docker:
       - image: python:3.7.3-stretch
 
-    #working_directory: .circleci/files/
 
     steps:
       - checkout
@@ -267,7 +266,7 @@ workflows:
   default:
     jobs:
       #- deploy_k8_cluster
-      - linting
+      - linting-blue
       #- deploy_blue_deployment
           #requires: [deploy_k8_cluster]
       #- deploy_green_deployment
