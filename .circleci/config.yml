@@ -154,6 +154,9 @@ jobs:
           command: |
             cd .circleci/files/blue
             docker build -t $IMAGE_NAME:latest .
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker tag $IMAGE_NAME rluzardo/$IMAGE_NAME
+            docker push rluzardo/$IMAGE_NAME
   
   docker-publish-blue:
     environment:
@@ -370,8 +373,8 @@ workflows:
           requires: [linting-blue]
       - docker-image-green:
           requires: [linting-green]
-      - docker-publish-blue:
-          requires: [docker-image-blue]
+      #- docker-publish-blue:
+      #    requires: [docker-image-blue]
       - docker-publish-green:
           requires: [docker-image-green]
       - deploy_blue_deployment:
