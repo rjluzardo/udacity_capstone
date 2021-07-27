@@ -95,7 +95,7 @@ jobs:
             cd .circleci/files/green
             . venv/bin/activate
             pwd
-            ls
+            ls -la
             make lint        
 
 
