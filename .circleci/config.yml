@@ -56,14 +56,11 @@ jobs:
             --node-type t2.micro \
             --nodes 3          
 
-  linting-blue:
+  linting-green:
     docker:
       - image: python:3.7.3-stretch
-
-
     steps:
       - checkout
-
       - run:
           name: whereami
           command: |
@@ -73,7 +70,6 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum ".circleci/files/green/requirements.txt" }}
             - v1-dependencies-
-
       - run:
           name: install dependencies
           command: |
@@ -97,6 +93,8 @@ jobs:
           command: |
             cd .circleci/files/green
             . venv/bin/activate
+            pwd
+            ls
             make lint        
 
 
@@ -266,7 +264,7 @@ workflows:
   default:
     jobs:
       #- deploy_k8_cluster
-      - linting-blue
+      - linting-green
       #- deploy_blue_deployment
           #requires: [deploy_k8_cluster]
       #- deploy_green_deployment
