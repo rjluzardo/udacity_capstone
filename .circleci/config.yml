@@ -154,7 +154,8 @@ jobs:
           command: |
             cd .circleci/files/blue
             docker build -t $IMAGE_NAME:latest .
-  publish-latest:
+  
+  publish-blue-latest:
     environment:
       IMAGE_NAME: building-on-ci
     docker:
@@ -180,18 +181,19 @@ jobs:
           command: |
             cd .circleci/files/green
             docker build -t $IMAGE_NAME:latest .
-    publish-latest:
-      environment:
-        IMAGE_NAME: building-on-ci
-      docker:
-        - image: circleci/buildpack-deps:stretch
-      steps:
-        - setup_remote_docker
-        - run:
-            name: Publish Docker Image to Docker Hub
-            command: |
-              echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-              docker push $IMAGE_NAME:latest
+  
+  publish-green-latest:
+    environment:
+      IMAGE_NAME: building-on-ci
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - setup_remote_docker
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker push $IMAGE_NAME:latest
 
 
   deploy_blue_deployment:
@@ -366,6 +368,10 @@ workflows:
           requires: [linting-blue]
       - docker-image-green:
           requires: [linting-green]
+      - publish-blue-latest:
+          requires: [docker-image-blue]
+      - publish-green-latest:
+          requires: [docker-image-green]
       - deploy_blue_deployment:
           requires: [docker-image-blue]
           #requires: [deploy_k8_cluster]
