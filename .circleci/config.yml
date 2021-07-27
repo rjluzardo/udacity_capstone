@@ -155,7 +155,7 @@ jobs:
             cd .circleci/files/blue
             docker build --tag=rluzardo/$IMAGE_NAME .
   
-  publish-blue-latest:
+  docker-publish-blue:
     environment:
       IMAGE_NAME: udacap_blue
     docker:
@@ -182,7 +182,7 @@ jobs:
             cd .circleci/files/green
             docker build --tag=rluzardo/$IMAGE_NAME .
   
-  publish-green-latest:
+  docker-publish-green:
     environment:
       IMAGE_NAME: udacap_green
     docker:
@@ -368,15 +368,15 @@ workflows:
           requires: [linting-blue]
       - docker-image-green:
           requires: [linting-green]
-      - publish-blue-latest:
+      - docker-publish-blue:
           requires: [docker-image-blue]
-      - publish-green-latest:
+      - docker-publish-green:
           requires: [docker-image-green]
       - deploy_blue_deployment:
-          requires: [publish-green-blue]
+          requires: [docker-publish-blue]
           #requires: [deploy_k8_cluster]
       - deploy_green_deployment:
-          requires: [publish-green-latest]
+          requires: [docker-publish-green]
           #requires: [deploy_k8_cluster]
       - blue-smoke-test:
             requires: [deploy_blue_deployment]
