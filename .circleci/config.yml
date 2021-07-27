@@ -377,16 +377,10 @@ workflows:
           requires: [linting-blue]
       - docker-image-green:
           requires: [linting-green]
-      #- docker-publish-blue:
-      #    requires: [docker-image-blue]
-      #- docker-publish-green:
-      #    requires: [docker-image-green]
       - deploy_blue_deployment:
           requires: [docker-image-blue]
-          #requires: [deploy_k8_cluster]
       - deploy_green_deployment:
           requires: [docker-image-green]
-          #requires: [deploy_k8_cluster]
       - blue-smoke-test:
             requires: [deploy_blue_deployment]
       - green-smoke-test:
