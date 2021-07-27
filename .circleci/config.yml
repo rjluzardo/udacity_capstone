@@ -377,8 +377,8 @@ workflows:
       #    requires: [docker-image-blue]
       - docker-publish-green:
           requires: [docker-image-green]
-      - deploy_blue_deployment:
-          requires: [docker-publish-blue]
+      - deploy_blue_deployment
+#          requires: [docker-publish-blue]
           #requires: [deploy_k8_cluster]
       - deploy_green_deployment:
           requires: [docker-publish-green]
