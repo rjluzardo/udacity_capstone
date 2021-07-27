@@ -56,7 +56,7 @@ jobs:
             --node-type t2.micro \
             --nodes 3          
 
-  linting:
+  linting blue:
     docker:
       - image: python:3.7.3-stretch
 
@@ -72,13 +72,13 @@ jobs:
             ls -la
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum ".circleci/files/requirements.txt" }}
+            - v1-dependencies-{{ checksum ".circleci/files/green/requirements.txt" }}
             - v1-dependencies-
 
       - run:
           name: install dependencies
           command: |
-            cd .circleci/files/
+            cd .circleci/files/green
             pwd
             ls -la
             python3 -m venv venv
@@ -91,7 +91,7 @@ jobs:
       - save_cache:
           paths:           
             - .circleci/files/venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+          key: v1-dependencies-{{ checksum ".circleci/files/green/requirements.txt" }}
 
       - run:
           name: green run lint
