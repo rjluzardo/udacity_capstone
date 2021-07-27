@@ -153,7 +153,7 @@ jobs:
           name: Build Docker image
           command: |
             cd .circleci/files/blue
-            docker build -t $IMAGE_NAME:latest .
+            docker build --tag=$IMAGE_NAME:latest .
   
   publish-blue-latest:
     environment:
@@ -166,6 +166,7 @@ jobs:
           name: Publish Docker Image to Docker Hub
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+  
             docker push $IMAGE_NAME:latest
 
   docker-image-green:
@@ -180,7 +181,7 @@ jobs:
           name: Build Docker image
           command: |
             cd .circleci/files/green
-            docker build -t $IMAGE_NAME:latest .
+            docker build --tag=$IMAGE_NAME:latest .
   
   publish-green-latest:
     environment:
