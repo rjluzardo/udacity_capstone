@@ -94,9 +94,9 @@ jobs:
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - run:
-          name: run lint
+          name: green run lint
           command: |
-            cd .circleci/files/
+            cd .circleci/files/green
             . venv/bin/activate
             make lint        
 
