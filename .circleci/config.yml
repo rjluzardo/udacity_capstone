@@ -166,8 +166,7 @@ jobs:
           name: Publish Docker Image to Docker Hub
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-  
-            docker push rluzardo/$IMAGE_NAMEt
+            docker push rluzardo/$IMAGE_NAME
 
   docker-image-green:
     environment:
@@ -374,10 +373,10 @@ workflows:
       - publish-green-latest:
           requires: [docker-image-green]
       - deploy_blue_deployment:
-          requires: [docker-image-blue]
+          requires: [publish-green-blue]
           #requires: [deploy_k8_cluster]
       - deploy_green_deployment:
-          requires: [docker-image-blue]
+          requires: [publish-green-latest]
           #requires: [deploy_k8_cluster]
       - blue-smoke-test:
             requires: [deploy_blue_deployment]
