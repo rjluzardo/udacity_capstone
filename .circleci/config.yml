@@ -22,15 +22,6 @@ commands:
             ./kubectl delete deploy udacapgreen-deployment
             ./kubectl delete svc udacap-pas-lb
 
-  destroy-cluster:
-    description: Destroy cluster
-    steps:
-      - run:
-          name: Destroy nodegroups
-          command: eksctl delete nodegroup --cluster=k8-udacapstone --name=udacaps-k8-nodes
-      - run:
-          name: Destroy cluster
-          command: eksctl delete cluster --name=k8-udacapstone 
 jobs: 
   deploy_k8_cluster:
     docker:
@@ -357,4 +348,4 @@ workflows:
       - green-smoke-test:
             requires: [deploy_green_deployment, blue-smoke-test]
       - cleanup:
-            requires: [green-smoke-test]
+            requires: [green-smoke-test]      
