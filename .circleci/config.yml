@@ -87,14 +87,16 @@ jobs:
             # Install hadolint
             wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
                 chmod +x /bin/hadolint
+      
       - save_cache:
-          paths:
-            - ./venv
+          paths:           
+            - .circleci/files/venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - run:
           name: run lint
           command: |
+            cd .circleci/files/
             . venv/bin/activate
             make lint        
 
