@@ -70,10 +70,10 @@ jobs:
           command: |
             pwd
             ls -la
-      #- restore_cache:
-      #    keys:
-      #      - v1-dependencies-{{ checksum "requirements.txt" }}
-      #      - v1-dependencies-
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            - v1-dependencies-
 
       - run:
           name: install dependencies
